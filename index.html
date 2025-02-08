@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self';">
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <form id="groceryForm">
+            <input type="text" id="item" placeholder="Enter item (e.g., Cheese)" maxlength="50" autocomplete="off" required>
+            <button type="button" id="addButton">Add Item</button>
+        </form>
+
+        <table id="groceryList">
+            <tr>
+                <th>Item</th>
+            </tr>
+        </table>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
