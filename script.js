@@ -1,15 +1,20 @@
+// Event listener for adding the item when the button is clicked
 document.getElementById('addButton').addEventListener('click', Add);
+
+// Event listener for pressing Enter (form submission)
 document.getElementById('groceryForm').addEventListener('submit', function (e) {
-    e.preventDefault(); // Prevent the default form submission behavior (like page reload)
+    e.preventDefault(); // Prevent default form submission (page refresh)
     Add();
 });
 
+// Sanitize input to avoid malicious characters
 function sanitizeInput(input) {
     const temp = document.createElement('div');
     temp.textContent = input;
     return temp.innerHTML;
 }
 
+// Function to add an item to the grocery list
 function Add() {
     const table = document.getElementById('groceryList');
     let item = document.getElementById('item').value.trim();
@@ -36,13 +41,13 @@ function Add() {
             vertical-align: middle;
         `;
 
-        document.getElementById('groceryForm').reset();
+        document.getElementById('groceryForm').reset(); // Clear input field
     } else {
         alert('Please enter a valid item.');
     }
 }
 
-// Input sanitization to prevent any non-alphanumeric characters
+// Restrict input to alphanumeric characters only
 document.getElementById('item').addEventListener('input', function () {
     this.value = this.value.replace(/[^a-zA-Z0-9\s]/g, '').substring(0, 50);
 });
