@@ -88,3 +88,28 @@ table tr.fade-out {
     opacity: 0;
     transform: translateX(20px);
 }
+
+/* Visual indication for dragging */
+.dragging {
+    opacity: 0.6;
+    background-color: #d1e7dd;
+    transform: scale(1.02);
+    transition: all 0.2s ease;
+}
+
+.drag-over {
+    border: 2px dashed #4CAF50;
+    transition: all 0.2s ease;
+}
+
+/* Add a drag handle */
+.drag-handle {
+    cursor: grab;
+    font-size: 20px;
+    padding-right: 8px;
+    color: #888;
+}
+
+.drag-handle:hover {
+    color: #333;
+}
