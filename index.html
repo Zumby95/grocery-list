@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,26 +7,29 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self';">
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
-
 <body>
+    <!-- Dark Mode Toggle -->
+    <div class="dark-mode-toggle">
+        <label class="switch">
+            <input type="checkbox" id="darkModeToggle">
+            <span class="slider"></span>
+        </label>
+    </div>
+
+    <!-- Main Container -->
     <div class="container">
         <form id="groceryForm">
             <input type="text" id="item" maxlength="50" placeholder="Create your list" autocomplete="off" required>
             <button type="button" id="addButton">Add Item</button>
-            <label class="switch">
-            <input type="checkbox" id="darkModeToggle">
-            <span class="slider"></span> Dark Mode
-    </label>
         </form>
-
         <table id="groceryList">
             <tr>
                 <th>Item</th>
+                <th>Action</th>
             </tr>
         </table>
     </div>
 
     <script src="script.js"></script>
 </body>
-
 </html>
