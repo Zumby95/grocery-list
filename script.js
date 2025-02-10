@@ -1,12 +1,13 @@
-document.getElementById('addButton').addEventListener('click', Add);
-document.getElementById('groceryForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-    Add();
-});
-
-// Load items from localStorage on page load
 window.onload = function () {
+    // First load the saved items
     loadItems();
+    
+    // Then set up the event listeners
+    document.getElementById('addButton').addEventListener('click', Add);
+    document.getElementById('groceryForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        Add();
+    });
 };
 
 // Sanitize input to prevent malicious content
