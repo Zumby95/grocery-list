@@ -33,8 +33,11 @@ function Add() {
         deleteButton.textContent = 'X';
         deleteButton.className = 'delete-btn';
         deleteButton.onclick = function () {
-            table.deleteRow(newRow.rowIndex);
-            saveItems();
+            newRow.classList.add('fade-out');
+            setTimeout(() => {
+                table.deleteRow(newRow.rowIndex);
+                saveItems();
+            }, 300);
         };
         deleteCell.appendChild(deleteButton);
 
@@ -46,8 +49,7 @@ function Add() {
 
         document.getElementById('groceryForm').reset();
 
-        // Save the updated list to localStorage
-        saveItems();
+        saveItems(); // Save the updated list to localStorage
     } else {
         alert('Please enter a valid item.');
     }
@@ -57,7 +59,7 @@ function saveItems() {
     const table = document.getElementById('groceryList');
     const items = [];
 
-    for (let i = 1; i < table.rows.length; i++) {  // Start at 1 to skip the header row
+    for (let i = 1; i < table.rows.length; i++) {
         items.push(table.rows[i].cells[0].textContent);
     }
 
@@ -79,8 +81,11 @@ function loadItems() {
         deleteButton.textContent = 'X';
         deleteButton.className = 'delete-btn';
         deleteButton.onclick = function () {
-            table.deleteRow(newRow.rowIndex);
-            saveItems();
+            newRow.classList.add('fade-out');
+            setTimeout(() => {
+                table.deleteRow(newRow.rowIndex);
+                saveItems();
+            }, 300);
         };
         deleteCell.appendChild(deleteButton);
 
