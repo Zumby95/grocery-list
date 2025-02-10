@@ -88,3 +88,9 @@ table tr.fade-out {
     opacity: 0;
     transform: translateX(20px);
 }
+
+.switch {
+    display: flex;
+    margin: right;
+    padding: 20px;
+}
