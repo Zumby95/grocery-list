@@ -26,7 +26,9 @@ function createRow(itemText) {
     const newRow = document.createElement('tr');
     newRow.draggable = true;
     newRow.innerHTML = `
-        <td>${itemText}</td>
+        <td>
+            <span class="drag-handle">☰</span> ${itemText}
+        </td>
         <td style="width: 30px; text-align: center;">
             <button class="delete-btn">X</button>
         </td>
@@ -52,17 +54,29 @@ function setupDragEvents(row) {
 
     row.addEventListener('dragend', () => {
         row.classList.remove('dragging');
-        saveItems(); // Save the new order after reordering
+        const tableRows = document.querySelectorAll('#groceryList tr');
+        tableRows.forEach(row => row.classList.remove('drag-over'));
+        saveItems();
     });
 
-    row.addEventListener('dragover', (e) => e.preventDefault());
+    row.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        const table = row.parentElement;
+        const draggingRow = document.querySelector('.dragging');
+        
+        if (draggingRow !== row) {
+            row.classList.add('drag-over');
+            table.insertBefore(draggingRow, row.nextSibling);
+        }
+    });
+
+    row.addEventListener('dragleave', () => {
+        row.classList.remove('drag-over');
+    });
 
     row.addEventListener('drop', (e) => {
         e.preventDefault();
-        const table = row.parentElement;
-        const draggedRowIndex = e.dataTransfer.getData('text/plain');
-        const draggedRow = table.rows[draggedRowIndex];
-        table.insertBefore(draggedRow, row.nextSibling);
+        row.classList.remove('drag-over');
     });
 }
 
@@ -71,7 +85,7 @@ function saveItems() {
     const items = [];
 
     for (let i = 1; i < table.rows.length; i++) {
-        items.push(table.rows[i].cells[0].textContent);
+        items.push(table.rows[i].cells[0].textContent.replace('☰', '').trim()); // Remove drag handle text
     }
 
     localStorage.setItem('groceryItems', JSON.stringify(items));
