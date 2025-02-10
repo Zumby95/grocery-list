@@ -1,2 +1,2 @@
-# grocery-list
-Simple grocery list app
+# Simple web-list
+
