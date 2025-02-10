@@ -1,20 +1,21 @@
-// Event listener for adding the item when the button is clicked
 document.getElementById('addButton').addEventListener('click', Add);
-
-// Event listener for pressing Enter (form submission)
 document.getElementById('groceryForm').addEventListener('submit', function (e) {
-    e.preventDefault(); // Prevent default form submission (page refresh)
+    e.preventDefault();
     Add();
 });
 
-// Sanitize input to avoid malicious characters
+// Load items from localStorage on page load
+window.onload = function () {
+    loadItems();
+};
+
+// Sanitize input to prevent malicious content
 function sanitizeInput(input) {
     const temp = document.createElement('div');
     temp.textContent = input;
     return temp.innerHTML;
 }
 
-// Function to add an item to the grocery list
 function Add() {
     const table = document.getElementById('groceryList');
     let item = document.getElementById('item').value.trim();
@@ -32,6 +33,7 @@ function Add() {
         deleteButton.className = 'delete-btn';
         deleteButton.onclick = function () {
             table.deleteRow(newRow.rowIndex);
+            saveItems();
         };
         deleteCell.appendChild(deleteButton);
 
@@ -41,13 +43,50 @@ function Add() {
             vertical-align: middle;
         `;
 
-        document.getElementById('groceryForm').reset(); // Clear input field
+        document.getElementById('groceryForm').reset();
+
+        // Save the updated list to localStorage
+        saveItems();
     } else {
         alert('Please enter a valid item.');
     }
 }
 
-// Restrict input to alphanumeric characters only
-document.getElementById('item').addEventListener('input', function () {
-    this.value = this.value.replace(/[^a-zA-Z0-9\s]/g, '').substring(0, 50);
-});
+function saveItems() {
+    const table = document.getElementById('groceryList');
+    const items = [];
+
+    for (let i = 1; i < table.rows.length; i++) {  // Start at 1 to skip the header row
+        items.push(table.rows[i].cells[0].textContent);
+    }
+
+    localStorage.setItem('groceryItems', JSON.stringify(items));
+}
+
+function loadItems() {
+    const items = JSON.parse(localStorage.getItem('groceryItems')) || [];
+    const table = document.getElementById('groceryList');
+
+    items.forEach(item => {
+        const newRow = table.insertRow();
+        const itemCell = newRow.insertCell(0);
+        const deleteCell = newRow.insertCell(1);
+
+        itemCell.textContent = item;
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'X';
+        deleteButton.className = 'delete-btn';
+        deleteButton.onclick = function () {
+            table.deleteRow(newRow.rowIndex);
+            saveItems();
+        };
+        deleteCell.appendChild(deleteButton);
+
+        deleteCell.style.cssText = `
+            width: 30px;
+            text-align: center;
+            vertical-align: middle;
+        `;
+    });
+}
