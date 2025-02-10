@@ -95,6 +95,7 @@ table tr.fade-out {
     top: 16px;       /* Distance from the top */
     right: 16px;     /* Distance from the right */
     z-index: 1000;   /* Ensure it's above other elements */
+    padding: 20%;
 }
 
 .switch {
