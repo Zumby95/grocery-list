@@ -1,160 +1,163 @@
 body {
-   font-family: 'Inter', sans-serif;
-   background-color: var(--background-color);
-   color: var(--text-color);
-   margin: 0;
-   padding: 0;
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   min-height: 100vh;
-   transition: background-color 0.3s ease, color 0.3s ease;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 :root {
-   --background-color: #f4f7f9;
-   --text-color: #333;
-   --button-bg: #4CAF50;
-   --button-hover-bg: #45a049;
-   --container-bg: #fff;
-   --table-even-bg: #f9f9f9;
+    --background-color: #f4f7f9;
+    --text-color: #333;
+    --button-bg: #4CAF50;
+    --button-hover-bg: #45a049;
+    --container-bg: #fff;
+    --table-even-bg: #f9f9f9;
+    --table-text: #333;
 }
 
 body.dark-mode {
-   --background-color: #1e1e1e;
-   --text-color: #f4f4f4;
-   --button-bg: #2d6a4f;
-   --button-hover-bg: #1b4332;
-   --container-bg: #2d2d2d;
-   --table-even-bg: #333;
+    --background-color: #1e1e1e;
+    --text-color: #f4f4f4;
+    --button-bg: #2d6a4f;
+    --button-hover-bg: #1b4332;
+    --container-bg: #2d2d2d;
+    --table-even-bg: #333;
+    --table-text: #f4f4f4;
 }
 
 .container {
-   max-width: 500px;
-   width: 90%;
-   background: var(--container-bg);
-   color: var(--text-color);
-   border-radius: 16px;
-   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-   overflow: hidden;
-   margin-top: 20px;
-   padding: 20px;
-   transition: background-color 0.3s ease, color 0.3s ease;
+    max-width: 500px;
+    width: 90%;
+    background: var(--container-bg);
+    color: var(--text-color);
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-top: 20px;
+    padding: 20px;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 form {
-   display: flex;
-   justify-content: space-between;
-   gap: 10px;
-   margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
 input[type="text"] {
-   flex: 1;
-   padding: 12px;
-   border: 1px solid #ddd;
-   border-radius: 8px;
-   font-size: 16px;
-   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-   outline: none;
-   background-color: var(--background-color);
-   color: var(--text-color);
-   border-color: var(--text-color);
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    outline: none;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-color: var(--text-color);
 }
 
 button {
-   padding: 12px 20px;
-   background: var(--button-bg);
-   color: white;
-   border: none;
-   border-radius: 8px;
-   cursor: pointer;
-   transition: background 0.3s ease;
+    padding: 12px 20px;
+    background: var(--button-bg);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
 }
 
 button:hover {
-   background: var(--button-hover-bg);
+    background: var(--button-hover-bg);
 }
 
 table {
-   width: 100%;
-   border-collapse: collapse;
-   margin-top: 20px;
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
 }
 
 th, td {
-   padding: 12px;
-   text-align: left;
+    padding: 12px;
+    text-align: left;
+    color: var(--table-text);
 }
 
 tr:nth-child(even) {
-   background-color: var(--table-even-bg);
+    background-color: var(--table-even-bg);
 }
 
 .delete-btn {
-   background: none;
-   border: none;
-   color: var(--text-color);
-   font-size: 18px;
-   font-weight: bold;
-   cursor: pointer;
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 .delete-btn:hover {
-   color: darkred;
+    color: darkred;
 }
 
 table tr {
-   transition: all 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 table tr.fade-out {
-   opacity: 0;
-   transform: translateX(20px);
+    opacity: 0;
+    transform: translateX(20px);
 }
 
 .switch {
-   display: inline-block;
-   position: relative;
-   width: 50px;
-   height: 24px;
-   margin-left: 15px;
+    display: inline-block;
+    position: relative;
+    width: 50px;
+    height: 24px;
+    margin-left: 15px;
 }
 
 .switch input {
-   opacity: 0;
-   width: 0;
-   height: 0;
+    opacity: 0;
+    width: 0;
+    height: 0;
 }
 
 .slider {
-   position: absolute;
-   top: 0;
-   left: 0;
-   right: 0;
-   bottom: 0;
-   background-color: #ccc;
-   border-radius: 24px;
-   cursor: pointer;
-   transition: 0.4s;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    border-radius: 24px;
+    cursor: pointer;
+    transition: 0.4s;
 }
 
 .slider:before {
-   position: absolute;
-   content: "";
-   height: 16px;
-   width: 16px;
-   left: 4px;
-   bottom: 4px;
-   background-color: white;
-   border-radius: 50%;
-   transition: 0.4s;
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    border-radius: 50%;
+    transition: 0.4s;
 }
 
 input:checked + .slider {
-   background-color: #4CAF50;
+    background-color: #4CAF50;
 }
 
 input:checked + .slider:before {
-   transform: translateX(26px);
+    transform: translateX(26px);
 }
