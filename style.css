@@ -30,23 +30,23 @@ body {
 
 /* Dark Mode Toggle Styling */
 .dark-mode-toggle {
-    position: fixed;
-    top: 16px; /* Position at the top */
-    left: 16px; /* Position on the left */
+    position: fixed; /* Fix it to the top-left corner */
+    top: 16px; /* Distance from the top */
+    left: 16px; /* Distance from the left */
     z-index: 1000; /* Ensure it's above other elements */
 }
 
 .switch {
-    position: relative;
-    display: inline-block;
+    position: relative; /* Required for absolute positioning of child elements */
+    display: inline-block; /* Inline-block for proper layout */
     width: 50px; /* Width of the slider */
     height: 24px; /* Height of the slider */
 }
 
 .switch input {
-    opacity: 0; /* Hide the checkbox */
-    width: 0;
-    height: 0;
+    opacity: 0; /* Hide the checkbox input */
+    width: 0; /* Remove default width */
+    height: 0; /* Remove default height */
 }
 
 .slider {
@@ -55,37 +55,60 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc; /* Default slider background */
-    border-radius: 24px; /* Rounded edges */
+    background-color: #ccc; /* Default slider background color */
+    border-radius: 24px; /* Rounded edges for the slider */
     cursor: pointer; /* Pointer cursor for interactivity */
 }
 
 .slider::before {
     position: absolute;
     content: "";
-    height: 16px; /* Circle size */
-    width: 16px; /* Circle size */
+    height: 16px; /* Size of the circular toggle button */
+    width: 16px; /* Size of the circular toggle button */
     left: 4px; /* Position inside the slider */
     bottom: 4px; /* Position inside the slider */
-    background-color: white; /* Circle color */
-    border-radius: 50%; /* Make it a circle */
-    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease-in-out; /* Smooth animation */
+    background-color: white; /* Color of the circular toggle button */
+    border-radius: 50%; /* Make it a perfect circle */
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease-in-out; /* Smooth animation for toggle movement */
 }
 
 input:checked + .slider {
-    background-color: var(--button-bg); /* Slider background when checked */
+    background-color: var(--button-bg); /* Slider background color when checked (dark mode) */
 }
 
 input:checked + .slider::before {
-    transform: translateX(26px); /* Move circle to the right when checked */
+    transform: translateX(26px); /* Move circular toggle button to the right when checked */
 }
 
 /* Container styling */
 .container {
-    max-width: 500px;
+    max-width: 500px; /* Limit container width to make it responsive */
+    width: 90%; /* Use up to 90% of available space on smaller screens */
+    background-color: var(--container-bg); /* Background color based on mode (light/dark) */
+    color: var(--text-color); /* Text color based on mode (light/dark) */
+    border-radius: 16px; /* Rounded corners for a modern look */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth effect */
+    overflow: hidden; /* Prevent content overflow outside container boundaries */
+    margin-top: 20px; /* Add spacing from top of page */
+    padding: 20px; /* Add padding inside container for spacing between elements */
 }
 
-/* Table styling */
-table {
-   width :100%;
+/* Form styling (input and button layout) */
+form {
+    display: flex; /* Flexbox layout for input and button alignment */
+    justify-content: space-between; /* Space between input and button elements */
+    gap: 10px; /* Add spacing between input and button elements */
 }
+
+input[type="text"] {
+    flex-grow: 1; /* Allow input to take up remaining space in flex container */
+    padding: 12px; /* Padding inside input field for better usability */
+    border-radius: 8px; /* Rounded corners for modern look */
+    font-size: 16px; /* Font size for readability on all devices */
+    border-width :1 px ;
+}
+
+/* Button styles (Add Item) */
+
+button:hover{
+backgroundcolor
