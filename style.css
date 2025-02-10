@@ -19,7 +19,13 @@ body.dark-mode {
     --table-text: #f4f4f4;
 }
 
-/* General body styling */
+/* Ensure consistent box-sizing across elements */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 body {
     font-family: 'Inter', sans-serif;
     background-color: var(--background-color);
@@ -30,27 +36,28 @@ body {
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Dark Mode Toggle Styling */
 .dark-mode-toggle {
-    position: fixed; /* Fix it to the top-left corner */
-    top: 16px; /* Distance from the top */
-    left: 16px; /* Distance from the left */
-    z-index: 1000; /* Ensure it's above other elements */
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 1000;
 }
 
 .switch {
-    position: relative; /* Required for absolute positioning of child elements */
-    display: inline-block; /* Inline-block for proper layout */
-    width: 50px; /* Width of the slider */
-    height: 24px; /* Height of the slider */
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
 }
 
 .switch input {
-    opacity: 0; /* Hide the checkbox input */
-    width: 0; /* Remove default width */
-    height: 0; /* Remove default height */
+    opacity: 0;
+    width: 0;
+    height: 0;
 }
 
 .slider {
@@ -59,60 +66,64 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc; /* Default slider background color */
-    border-radius: 24px; /* Rounded edges for the slider */
-    cursor: pointer; /* Pointer cursor for interactivity */
-    transition: .4s;
+    background-color: #ccc;
+    border-radius: 24px;
+    cursor: pointer;
+    transition: 0.4s;
 }
 
 .slider::before {
     position: absolute;
     content: "";
-    height: 16px; /* Size of the circular toggle button */
-    width: 16px; /* Size of the circular toggle button */
-    left: 4px; /* Position inside the slider */
-    bottom: 4px; /* Position inside the slider */
-    background-color: white; /* Color of the circular toggle button */
-    border-radius: 50%; /* Make it a perfect circle */
-    transition: .4s;
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    border-radius: 50%;
+    transition: 0.4s;
 }
 
 input:checked + .slider {
-    background-color: var(--button-bg); /* Slider background color when checked (dark mode) */
+    background-color: var(--button-bg);
 }
 
 input:checked + .slider::before {
-    transform: translateX(26px); /* Move circular toggle button to the right when checked */
+    transform: translateX(26px);
 }
 
 /* Container styling */
 .container {
-    max-width: 500px; /* Limit container width to make it responsive */
-    width: 90%; /* Use up to 90% of available space on smaller screens */
-    background-color: var(--container-bg); /* Background color based on mode (light/dark) */
-    color: var(--text-color); /* Text color based on mode (light/dark) */
-    border-radius: 16px; /* Rounded corners for a modern look */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth effect */
-    overflow: hidden; /* Prevent content overflow outside container boundaries */
-    margin-top: 20px; /* Add spacing from top of page */
-    padding: 20px; /* Add padding inside container for spacing between elements */
+    max-width: 500px;
+    width: 90%;
+    background-color: var(--container-bg);
+    color: var(--text-color);
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-top: 20px;
+    padding: 20px;
 }
 
-/* Form styling (input and button layout) */
+/* Form styling */
 form {
-    display: flex; /* Flexbox layout for input and button alignment */
-    justify-content: space-between; /* Space between input and button elements */
-    gap: 10px; /* Add spacing between input and button elements */
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
 }
 
 input[type="text"] {
-    flex-grow: 1; /* Allow input to take up remaining space in flex container */
-    padding: 12px; /* Padding inside input field for better usability */
-    border-radius: 8px; /* Rounded corners for modern look */
-    font-size: 16px; /* Font size for readability on all devices */
-    border: 1px solid #ddd; /* Add a light border for visibility */
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle inner shadow */
-    outline: none; /* Remove the default focus outline */
+    flex-grow: 1;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus {
+    border-color: var(--button-bg);
 }
 
 button {
@@ -153,6 +164,7 @@ tr:nth-child(even) {
     font-size: 18px;
     font-weight: bold;
     cursor: pointer;
+    transition: color 0.3s ease;
 }
 
 .delete-btn:hover {
