@@ -44,7 +44,7 @@ body {
 }
 
 .switch input {
-    opacity: 0;
+    opacity: 0; /* Hide the checkbox */
     width: 0;
     height: 0;
 }
@@ -55,39 +55,37 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc;
-    border-radius: 24px;
-    cursor: pointer;
+    background-color: #ccc; /* Default slider background */
+    border-radius: 24px; /* Rounded edges */
+    cursor: pointer; /* Pointer cursor for interactivity */
 }
 
 .slider::before {
     position: absolute;
     content: "";
-    height: 16px;
-    width: 16px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    border-radius: 50%;
-    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease-in-out;
+    height: 16px; /* Circle size */
+    width: 16px; /* Circle size */
+    left: 4px; /* Position inside the slider */
+    bottom: 4px; /* Position inside the slider */
+    background-color: white; /* Circle color */
+    border-radius: 50%; /* Make it a circle */
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease-in-out; /* Smooth animation */
 }
 
 input:checked + .slider {
-    background-color: var(--button-bg);
+    background-color: var(--button-bg); /* Slider background when checked */
 }
 
 input:checked + .slider::before {
-    transform: translateX(26px);
+    transform: translateX(26px); /* Move circle to the right when checked */
 }
 
 /* Container styling */
 .container {
     max-width: 500px;
-    width: 90%;
 }
 
 /* Table styling */
 table {
-   /* Existing styles here */
+   width :100%;
 }
-
