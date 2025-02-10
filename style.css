@@ -31,16 +31,16 @@ body {
 /* Dark Mode Toggle Styling */
 .dark-mode-toggle {
     position: fixed;
-    top: 16px;
-    left: 16px;
-    z-index: 1000;
+    top: 16px; /* Position at the top */
+    left: 16px; /* Position on the left */
+    z-index: 1000; /* Ensure it's above other elements */
 }
 
 .switch {
     position: relative;
     display: inline-block;
-    width: 50px;
-    height: 24px;
+    width: 50px; /* Width of the slider */
+    height: 24px; /* Height of the slider */
 }
 
 .switch input {
