@@ -102,14 +102,25 @@ table tr.fade-out {
     transition: all 0.2s ease;
 }
 
-/* Add a drag handle */
+/* Mobile-friendly drag handle */
 .drag-handle {
     cursor: grab;
-    font-size: 20px;
-    padding-right: 8px;
+    font-size: 28px; /* Increase size for better visibility on mobile */
+    padding-right: 12px;
     color: #888;
+    background-color: #f0f0f0; /* Light background for visibility */
+    border-radius: 8px;
+    padding: 5px 8px; /* Larger touch area */
+    margin-right: 10px;
 }
 
 .drag-handle:hover {
     color: #333;
+    background-color: #e0e0e0; /* Slight change on hover */
+}
+
+/* Ensure the drag handle appears at the start of the item */
+td {
+    display: flex;
+    align-items: center;
 }
