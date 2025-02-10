@@ -8,6 +8,20 @@ window.onload = function () {
         e.preventDefault();
         Add();
     });
+
+    const darkModeToggle = document.getElementById('darkModeToggle');
+const isDarkMode = localStorage.getItem('darkMode') === 'true';
+
+if (isDarkMode) {
+    document.body.classList.add('dark-mode');
+    darkModeToggle.checked = true;
+}
+
+darkModeToggle.addEventListener('change', function () {
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('darkMode', darkModeToggle.checked);
+});
+
 };
 
 // Sanitize input to prevent malicious content
