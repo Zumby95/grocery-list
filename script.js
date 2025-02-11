@@ -1,13 +1,19 @@
 window.onload = function () {
+    // Load items from localStorage and from URL parameters
+    loadItemsFromURL();
     loadItems();
+
+    // Event listener for adding items
     document.getElementById('addButton').addEventListener('click', Add);
+
+    // Event listener for sharing the list
+    document.getElementById('shareButton').addEventListener('click', generateShareableLink);
+
+    // Event listener for the grocery form submission (for pressing Enter key)
     document.getElementById('groceryForm').addEventListener('submit', function (e) {
         e.preventDefault();
         Add();
     });
-
-    // Add event listener for shareButton
-    document.getElementById('shareButton').addEventListener('click', generateShareableLink);
 };
 
 function Add() {
@@ -28,15 +34,15 @@ function Add() {
 function createRow(itemText) {
     const newRow = document.createElement('tr');
     newRow.draggable = true;
-    
+
     const cell = document.createElement('td');
-    
+
     const dragHandle = document.createElement('span');
     dragHandle.className = 'drag-handle';
     dragHandle.textContent = '☰';
-    
+
     const textNode = document.createTextNode(` ${itemText} `);
-    
+
     const deleteBtn = document.createElement('button');
     deleteBtn.className = 'delete-btn';
     deleteBtn.textContent = 'X';
@@ -96,9 +102,8 @@ function saveItems() {
     const items = [];
 
     for (let i = 1; i < table.rows.length; i++) {
-        // Get the cell's text content but exclude the drag handle and delete button
         const cell = table.rows[i].cells[0];
-        const text = cell.childNodes[1].textContent.trim(); // Get the text node between drag handle and delete button
+        const text = cell.childNodes[1].textContent.trim();
         items.push(text);
     }
 
@@ -150,14 +155,3 @@ function loadItemsFromURL() {
         table.appendChild(newRow);
     });
 }
-
-// Call this on page load to check if the URL contains shared items
-window.onload = function () {
-    loadItemsFromURL();
-    loadItems();
-    document.getElementById('addButton').addEventListener('click', Add);
-    document.getElementById('groceryForm').addEventListener('submit', function (e) {
-        e.preventDefault();
-        Add();
-    });
-};
