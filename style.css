@@ -110,7 +110,6 @@ table tr.fade-out {
     color: #888;
     background-color: #f0f0f0; /* Light background for visibility */
     border-radius: 8px;
-    padding: 5px 8px; /* Larger touch area */
     margin-right: 10px;
 }
 
