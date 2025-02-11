@@ -29,7 +29,13 @@ body {
     color: #fff;
     display: flex;
     flex-direction: column;
-    border-right: 1px solid rgba(0, 0, 0, 0.1); /* Add subtle separation */
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    transform: translateX(0);
+}
+
+.sidebar-hidden {
+    transform: translateX(-100%);
 }
 
 .sidebar-header {
@@ -59,10 +65,26 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 1.2em; /* Increase touch target size */
+    font-size: 1.2em;
 }
 
 .sidebar-nav li a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.list-menu a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    color: #ddd;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 1.2em;
+}
+
+.list-menu a:hover {
     background-color: rgba(255, 255, 255, 0.1);
 }
 
@@ -83,7 +105,7 @@ body {
     border-radius: 5px;
     text-align: center;
     transition: background-color 0.3s;
-    font-size: 1.1em; /* Increase touch target size */
+    font-size: 1.1em;
 }
 
 .sidebar-footer a:hover {
@@ -96,19 +118,19 @@ body {
     padding: 20px;
     display: flex;
     flex-direction: column;
-    align-items: stretch; /* Stretch items to fill the container */
+    align-items: stretch;
 }
 
 /* Add Item Section */
 .add-item-section {
     margin-bottom: 20px;
-    width: 100%; /* Ensure full width */
+    width: 100%;
 }
 
 #groceryForm {
     display: flex;
     gap: 10px;
-    width: 100%; /* Ensure full width */
+    width: 100%;
 }
 
 #item {
@@ -116,7 +138,7 @@ body {
     padding: 15px;
     border: 1px solid #ddd;
     border-radius: 5px;
-    font-size: 1.2em; /* Increase input text size */
+    font-size: 1.2em;
 }
 
 #addButton {
@@ -127,7 +149,7 @@ body {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
-    font-size: 1.2em; /* Increase button text size */
+    font-size: 1.2em;
 }
 
 #addButton:hover {
@@ -137,7 +159,7 @@ body {
 /* List Section */
 .list-section {
     flex-grow: 1;
-    width: 100%; /* Ensure full width */
+    width: 100%;
 }
 
 #groceryList {
@@ -152,7 +174,7 @@ body {
     border-bottom: 2px solid #ddd;
     color: #555;
     font-weight: 500;
-    font-size: 1.2em; /* Increase heading text size */
+    font-size: 1.2em;
 }
 
 #groceryList tbody tr {
@@ -164,13 +186,13 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 1.1em; /* Increase list item text size */
+    font-size: 1.1em;
 }
 
 .drag-handle {
     cursor: grab;
     color: #888;
-    font-size: 1.3em; /* Increase drag handle size */
+    font-size: 1.3em;
 }
 
 .delete-btn {
@@ -181,7 +203,7 @@ body {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
-    font-size: 1em; /* Increase delete button text size */
+    font-size: 1em;
 }
 
 .delete-btn:hover {
@@ -210,7 +232,7 @@ body {
         width: 100%;
         max-height: 200px;
         overflow-y: auto;
-        border-right: none; /* Remove border on mobile */
+        border-right: none;
     }
 
     .sidebar-header {
@@ -244,11 +266,11 @@ body {
     }
 
     .main-content {
-        padding: 10px; /* Reduce padding on smaller screens */
+        padding: 10px;
     }
 
     #item,
     #addButton {
-        padding: 12px; /* Adjust padding for form elements */
+        padding: 12px;
     }
 }
