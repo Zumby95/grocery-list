@@ -32,7 +32,7 @@ function createRow(itemText) {
     dragHandle.className = 'drag-handle';
     dragHandle.textContent = '☰';
     
-    const textNode = document.createTextNode(' ${itemText} ');
+    const textNode = document.createTextNode(` ${itemText} `);
     
     const deleteBtn = document.createElement('button');
     deleteBtn.className = 'delete-btn';
