@@ -1,36 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Manager</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Manager</title>
+  <!-- Optionally include a modern font – e.g. Roboto -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <div class="list-controls">
-            <button type="button" id="newListButton" class="button">Create New List</button>
-            <select id="listSelector">
-                <option value="" disabled selected>Select a list</option>
-            </select>
-            <button type="button" id="renameListButton" class="button">Rename List</button>
-            <button type="button" id="deleteListButton" class="button">Delete List</button>
-        </div>
-
-        <form id="groceryForm">
-            <input type="text" id="item" maxlength="50" placeholder="Add an item" autocomplete="off" required>
-            <button type="button" id="addButton" class="button">Add Item</button>
-        </form>
-        
-        <button type="button" id="shareButton" class="button">Share List</button>
-        
-        <table id="groceryList">
-            <tr>
-                <th>Item</th>
-            </tr>
-        </table>
+  <header class="header">
+    <h1>Task Manager</h1>
+  </header>
+  <main class="container">
+    <div class="list-controls">
+      <button type="button" id="newListButton" class="button">Create New List</button>
+      <select id="listSelector">
+        <option value="" disabled selected>Select a list</option>
+      </select>
+      <button type="button" id="renameListButton" class="button">Rename List</button>
+      <button type="button" id="deleteListButton" class="button">Delete List</button>
     </div>
 
-    <script src="script.js"></script>
+    <form id="groceryForm">
+      <input type="text" id="item" maxlength="50" placeholder="Add an item" autocomplete="off" required>
+      <button type="button" id="addButton" class="button">Add Item</button>
+    </form>
+    
+    <button type="button" id="shareButton" class="button share-button">Share List</button>
+    
+    <table id="groceryList">
+      <tr>
+        <th>Item</th>
+      </tr>
+    </table>
+  </main>
+
+  <script src="script.js"></script>
 </body>
 </html>
