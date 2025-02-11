@@ -28,6 +28,8 @@ function createRow(itemText) {
     newRow.innerHTML = `
         <td>
             <span class="drag-handle">☰</span> ${itemText}
+        </td>
+        <td style="width: 30px; text-align: center;">
             <button class="delete-btn">X</button>
         </td>
     `;
@@ -83,7 +85,7 @@ function saveItems() {
     const items = [];
 
     for (let i = 1; i < table.rows.length; i++) {
-        items.push(table.rows[i].cells[0].textContent.replace('☰', '').trim()); // Remove drag handle text
+        items.push(table.rows[i].cells[0].textContent.replace('☰', '').trim()); // Only save item name, not the button
     }
 
     localStorage.setItem('groceryItems', JSON.stringify(items));
