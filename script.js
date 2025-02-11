@@ -29,7 +29,7 @@ function createRow(itemText) {
         <td>
             <span class="drag-handle">☰</span> ${itemText}
         </td>
-        <td style="width: 30px; text-align: center;">
+        <td style="width: 15px; text-align: center;">
             <button class="delete-btn">X</button>
         </td>
     `;
