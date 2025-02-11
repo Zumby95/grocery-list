@@ -19,6 +19,20 @@ body {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.list-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.list-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 0;
 }
 
 #listSelector {
@@ -26,15 +40,20 @@ body {
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    min-width: 150px;
 }
 
-#newListButton {
+.button {
     padding: 8px 16px;
-    background-color: #4CAF50;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    touch-action: manipulation;
+}
+
+#newListButton {
+    background-color: #4CAF50;
 }
 
 #newListButton:hover {
@@ -42,22 +61,26 @@ body {
 }
 
 #deleteListButton {
-    padding: 8px 16px;
     background-color: #ff4444;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
 }
 
 #deleteListButton:hover {
     background-color: #cc0000;
 }
 
+#renameListButton {
+    background-color: #FFA500;
+}
+
+#renameListButton:hover {
+    background-color: #FF8C00;
+}
+
 #groceryForm {
     margin-bottom: 20px;
     display: flex;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
 #item {
@@ -65,15 +88,11 @@ body {
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    min-width: 200px;
 }
 
 #addButton {
-    padding: 8px 16px;
     background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
 }
 
 #addButton:hover {
@@ -81,12 +100,7 @@ body {
 }
 
 #shareButton {
-    padding: 8px 16px;
     background-color: #00BFFF;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
     margin-bottom: 20px;
 }
 
@@ -101,6 +115,8 @@ body {
 
 #groceryList tr {
     border-bottom: 1px solid #eee;
+    background-color: white;
+    touch-action: none;
 }
 
 #groceryList td {
@@ -116,6 +132,13 @@ body {
     color: #999;
     margin-right: 10px;
     user-select: none;
+    padding: 0 10px;
+    touch-action: none;
+}
+
+.item-content {
+    flex-grow: 1;
+    margin: 0 10px;
 }
 
 .delete-btn {
@@ -133,8 +156,9 @@ body {
 }
 
 .dragging {
-    opacity: 0.5;
-    background-color: #f5f5f5;
+    opacity: 0.9;
+    background-color: #f8f8f8;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 .drag-over {
@@ -144,4 +168,18 @@ body {
 .fade-out {
     opacity: 0;
     transition: opacity 0.3s ease-out;
+}
+
+@media (max-width: 600px) {
+    .list-controls {
+        flex-direction: column;
+    }
+    
+    #groceryForm {
+        flex-direction: column;
+    }
+    
+    .button {
+        width: 100%;
+    }
 }
