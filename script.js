@@ -10,34 +10,37 @@ window.onload = function () {
 function Add() {
     const table = document.getElementById('groceryList');
     let item = document.getElementById('item').value.trim();
+    let quantity = document.getElementById('quantity').value.trim();
 
-    if (item) {
+    if (item && quantity && quantity > 0) {
         const sanitizedItem = sanitizeInput(item);
-        const newRow = createRow(sanitizedItem);
+        const sanitizedQty = sanitizeInput(quantity);
+
+        const newRow = createRow(sanitizedItem, sanitizedQty);
         table.appendChild(newRow);
         document.getElementById('groceryForm').reset();
         saveItems();
     } else {
-        alert('Please enter a valid item.');
+        alert('Please enter a valid item and quantity.');
     }
 }
 
-function createRow(itemText) {
+function createRow(itemText, quantity) {
     const newRow = document.createElement('tr');
     newRow.draggable = true;
-    
+
     const cell = document.createElement('td');
-    
+
     const dragHandle = document.createElement('span');
     dragHandle.className = 'drag-handle';
     dragHandle.textContent = '☰';
-    
-    const textNode = document.createTextNode(` ${itemText} `);
-    
+
+    const textNode = document.createTextNode(` ${quantity} ${itemText} `);
+
     const deleteBtn = document.createElement('button');
     deleteBtn.className = 'delete-btn';
     deleteBtn.textContent = 'X';
-    deleteBtn.onclick = function() {
+    deleteBtn.onclick = function () {
         newRow.classList.add('fade-out');
         setTimeout(() => {
             newRow.remove();
@@ -93,10 +96,9 @@ function saveItems() {
     const items = [];
 
     for (let i = 1; i < table.rows.length; i++) {
-        // Get the cell's text content but exclude the drag handle and delete button
         const cell = table.rows[i].cells[0];
-        const text = cell.childNodes[1].textContent.trim(); // Get the text node between drag handle and delete button
-        items.push(text);
+        const fullText = cell.childNodes[1].textContent.trim(); // Example: "3 Apples"
+        items.push(fullText);
     }
 
     localStorage.setItem('groceryItems', JSON.stringify(items));
@@ -107,11 +109,11 @@ function loadItems() {
     const table = document.getElementById('groceryList');
 
     items.forEach(item => {
-        const newRow = createRow(item);
+        const [quantity, ...itemText] = item.split(' '); // Split first part as quantity
+        const newRow = createRow(itemText.join(' '), quantity);
         table.appendChild(newRow);
     });
 }
-
 function sanitizeInput(input) {
     const temp = document.createElement('div');
     temp.textContent = input;
