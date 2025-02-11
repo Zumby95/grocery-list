@@ -14,7 +14,11 @@
 
 <body>
     <div class="container">
-        <aside class="sidebar">
+        <!-- Sidebar toggle button -->
+        <button id="sidebarToggle" class="sidebar-toggle"><i class="fas fa-bars"></i></button>
+
+        <!-- Sidebar -->
+        <aside class="sidebar hidden">
             <header class="sidebar-header">
                 <span class="site-title">Grocery Lists</span>
             </header>
@@ -50,13 +54,18 @@
                 </a>
             </footer>
         </aside>
+
+        <!-- Main Content -->
         <main class="main-content">
+            <!-- Add Item Section -->
             <section class="add-item-section">
                 <form id="groceryForm">
                     <input type="text" id="item" placeholder="Add item..." autocomplete="off">
                     <button type="button" id="addButton"><i class="fas fa-plus"></i></button>
                 </form>
             </section>
+
+            <!-- List Section -->
             <section class="list-section">
                 <table id="groceryList">
                     <thead>
@@ -64,23 +73,25 @@
                             <th>Item</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <!-- List items will be dynamically loaded here -->
-                    </tbody>
+                    <tbody></tbody>
                 </table>
             </section>
-        </main>
-                <!-- Scanner Modal -->
-                <div id="scannerModal" class="modal hidden">
-                    <div class="modal-content">
-                        <span class="close" onclick="closeScanner()">&times;</span>
-                        <video id="video" autoplay playsinline></video>
-                        <button id="captureButton" class="button">Capture Scan</button>
-                    </div>
+
+            <!-- Scanner Modal -->
+            <div id="scannerModal" class="modal hidden">
+                <div class="modal-content">
+                    <span class="close" onclick="closeScanner()">&times;</span>
+                    <video id="video" autoplay playsinline></video>
+                    <button id="captureButton" class="button">Capture Scan</button>
                 </div>
+            </div>
+        </main>
     </div>
-   <!-- Load Tesseract.js for OCR (make sure this script is available in your project) -->
-   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@v2.1.5/dist/tesseract.min.js"></script>
+
+    <!-- Load Tesseract.js for OCR -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@v2.1.5/dist/tesseract.min.js"></script>
+
+    <!-- JavaScript -->
     <script src="script.js"></script>
 </body>
 
