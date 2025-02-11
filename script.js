@@ -28,8 +28,6 @@ function createRow(itemText) {
     newRow.innerHTML = `
         <td>
             <span class="drag-handle">☰</span> ${itemText}
-        </td>
-        <td style="width: 15px; text-align: center;">
             <button class="delete-btn">X</button>
         </td>
     `;
