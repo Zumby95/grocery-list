@@ -23,20 +23,22 @@ body {
     color: #fff;
     display: flex;
     flex-direction: column;
-    transition: transform 0.3s ease-in-out;
+    transition: transform 0.3s ease-in-out; /* Smooth animation for sliding */
     z-index: 1000;
 }
 
 .sidebar.show {
-    transform: translateX(250px); /* Slide in */
+    transform: translateX(250px); /* Slide in when toggled */
 }
 
 .sidebar-header {
     padding: 20px;
+    text-align: left;
 }
 
 .site-title {
     font-size: 1.5em;
+    font-weight: bold;
 }
 
 .sidebar-nav ul {
@@ -49,58 +51,137 @@ body {
     padding: 15px 20px;
     color: #ddd;
     text-decoration: none;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.sidebar-nav li a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.list-menu a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    color: #ddd;
+    text-decoration: none;
+}
+
+.list-menu a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-footer {
+    margin-top: auto; /* Push footer to the bottom */
+    padding: 20px;
 }
 
 .sidebar-footer a {
+    display: block;
     padding: 12px 15px;
+    text-decoration: none;
+    color: #ddd;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 5px;
+    text-align: center;
+}
+
+.sidebar-footer a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Sidebar Toggle Button */
 .sidebar-toggle {
-    position: fixed;
-    top: 15px;
-    left: 15px;
-    background-color: #343a40;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px;
-    cursor: pointer;
+    position: fixed; /* Fixed position for easy access */
+    top: 15px; /* Adjust based on your design */
+    left: 15px; /* Adjust based on your design */
+    background-color: #343a40; /* Match sidebar color */
+    color: white; /* Icon color */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px; /* Add some padding around the icon */
+    cursor: pointer; /* Pointer cursor for interactivity */
 }
 
 .sidebar-toggle i {
-    font-size: 1.5em;
+    font-size: 1.5em; /* Icon size */
 }
 
-/* Main Content */
-.main-content {
-    flex-grow: 1;
-    margin-left: 20px; /* Adjust to avoid overlap with the sidebar toggle */
-}
-
-/* Add Item Section */
-.add-item-section form {
-    display: flex;
-}
-
-/* Modal Styling */
-.modal.hidden {
-    display: none !important; /* Hide modal by default */
-}
-
-/* Responsive Design */
+/* Hide toggle button on larger screens (desktop) */
 @media (min-width: 768px) {
     .sidebar-toggle {
         display: none; /* Hide toggle button on larger screens */
     }
 
     .sidebar {
-        transform: translateX(0); /* Always visible on larger screens */
+        transform: translateX(0); /* Sidebar always visible on larger screens */
         position: relative; /* Sidebar becomes part of the layout */
         left: 0; /* Reset left position */
         width: auto; /* Adjust width for larger screens */
         height: auto; /* Adjust height for larger screens */
-        flex-basis: auto; /* Adjust size for larger screens */
-        z-index: auto; /* Reset z-index for larger screens */
-        transition-property: none; /* Disable transitions on larger screens */
-        box-shadow:none;}
+        flex-basis:auto;}}
+
+/* Main Content Styles */
+.main-content {
+   flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.modal-content video {
+    width: 100%;
+    border-radius: 6px;
+}
+
+.modal-content .close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.hidden {
+    display: none !important; /* Hide modal by default */
+}
+
+/* Utility Classes */
+.fade-out {
+    opacity: 0; /* Fades out the element */
+    transition: opacity 0.3s ease-out; /* Smooth fade-out effect */
+}
+
+.dragging {
+    background-color: #f0f0f0; /* Highlight dragged item */
+    border: 2px dashed #ccc; /* Dashed border for visual cue */
+}
+
+/* Highlight Active List in Sidebar */
+.list-menu a.active-list {
+    background-color: rgba(255, 255, 255, 0.2); /* Light highlight for active list */
+    font-weight: bold; /* Bold text for emphasis */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column; /* Stack elements vertically on smaller screens */
+        margin-top: 50px; /* Add space for the sidebar toggle button */
+    }
+
+    .main-content {
+        margin-left: 0; /* Remove margin since sidebar is hidden by default */
+        padding-top: 20px; /* Add padding to avoid overlap with toggle button */
+    }
+}
