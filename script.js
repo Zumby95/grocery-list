@@ -25,22 +25,30 @@ function Add() {
 function createRow(itemText) {
     const newRow = document.createElement('tr');
     newRow.draggable = true;
-    newRow.innerHTML = `
-        <td>
-            <span class="drag-handle">☰</span> ${itemText}
-        </td>
-        <td style="width: 30px; text-align: center;">
-            <button class="delete-btn">X</button>
-        </td>
-    `;
-
-    newRow.querySelector('.delete-btn').onclick = function () {
+    
+    const cell = document.createElement('td');
+    
+    const dragHandle = document.createElement('span');
+    dragHandle.className = 'drag-handle';
+    dragHandle.textContent = '☰';
+    
+    const textNode = document.createTextNode(` ${itemText} `);
+    
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'delete-btn';
+    deleteBtn.textContent = 'X';
+    deleteBtn.onclick = function() {
         newRow.classList.add('fade-out');
         setTimeout(() => {
             newRow.remove();
             saveItems();
         }, 300);
     };
+
+    cell.appendChild(dragHandle);
+    cell.appendChild(textNode);
+    cell.appendChild(deleteBtn);
+    newRow.appendChild(cell);
 
     setupDragEvents(newRow);
     return newRow;
@@ -85,7 +93,10 @@ function saveItems() {
     const items = [];
 
     for (let i = 1; i < table.rows.length; i++) {
-        items.push(table.rows[i].cells[0].textContent.replace('☰', '').trim()); // Only save item name, not the button
+        // Get the cell's text content but exclude the drag handle and delete button
+        const cell = table.rows[i].cells[0];
+        const text = cell.childNodes[1].textContent.trim(); // Get the text node between drag handle and delete button
+        items.push(text);
     }
 
     localStorage.setItem('groceryItems', JSON.stringify(items));
