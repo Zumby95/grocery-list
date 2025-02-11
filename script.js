@@ -12,6 +12,7 @@ window.onload = function () {
     document.getElementById('shareButton').addEventListener('click', handleShareButton);
     document.getElementById('listSelector').addEventListener('change', loadSelectedList);
     document.getElementById('deleteListButton').addEventListener('click', deleteSelectedList);
+    document.getElementById('renameListButton').addEventListener('click', renameList);
 };
 
 function createNewList() {
@@ -120,6 +121,73 @@ function createRow(itemText) {
 }
 
 function setupDragEvents(row) {
+
+    function setupDragEvents(row) {
+        let isDragging = false;
+        let startY = 0;
+        let currentY = 0;
+        let initialRow;
+        
+        // Touch events
+        row.addEventListener('touchstart', (e) => {
+            const touch = e.touches[0];
+            const handleElement = e.target.closest('.drag-handle');
+            
+            if (!handleElement) return;
+            
+            isDragging = true;
+            startY = touch.pageY;
+            initialRow = row;
+            row.classList.add('dragging');
+            
+            // Store initial positions of all rows
+            const rows = Array.from(row.parentElement.children);
+            rows.forEach(r => {
+                r.initialPosition = r.getBoundingClientRect().top;
+            });
+        }, { passive: false });
+    
+        row.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            
+            const touch = e.touches[0];
+            currentY = touch.pageY;
+            const deltaY = currentY - startY;
+            
+            // Move the dragged row
+            row.style.transform = `translateY(${deltaY}px)`;
+            
+            // Find the row we're hovering over
+            const rows = Array.from(row.parentElement.children);
+            const hoverRow = rows.find(r => {
+                if (r === row) return false;
+                const rect = r.getBoundingClientRect();
+                return currentY >= rect.top && currentY <= rect.bottom;
+            });
+            
+            if (hoverRow) {
+                const movingDown = deltaY > 0;
+                const siblingRow = movingDown ? hoverRow.nextElementSibling : hoverRow;
+                row.parentElement.insertBefore(row, siblingRow);
+                
+                // Reset transform after moving
+                requestAnimationFrame(() => {
+                    row.style.transform = '';
+                    startY = touch.pageY;
+                });
+            }
+        }, { passive: false });
+    
+        row.addEventListener('touchend', () => {
+            if (!isDragging) return;
+            isDragging = false;
+            row.classList.remove('dragging');
+            row.style.transform = '';
+            saveItems(document.getElementById('listSelector').value);
+        });
+    
+
     row.addEventListener('dragstart', (e) => {
         e.dataTransfer.setData('text/plain', row.rowIndex);
         row.classList.add('dragging');
@@ -151,7 +219,7 @@ function setupDragEvents(row) {
         e.preventDefault();
         row.classList.remove('drag-over');
     });
-}
+}}
 
 function saveItems(listName) {
     const table = document.getElementById('groceryList');
@@ -278,6 +346,37 @@ function setupListSelector() {
             console.error('Error loading shared list:', error);
             alert('There was an error loading the shared list.');
         }
+    }
+}
+
+// Add new function for renaming lists
+function renameList() {
+    const listSelector = document.getElementById('listSelector');
+    const currentName = listSelector.value;
+    
+    if (!currentName) {
+        alert('Please select a list first.');
+        return;
+    }
+    
+    const newName = prompt(`Enter new name for "${currentName}":`, currentName);
+    
+    if (newName && newName.trim() && newName !== currentName) {
+        if (localStorage.getItem(newName)) {
+            alert('A list with this name already exists.');
+            return;
+        }
+        
+        // Get the current items
+        const items = JSON.parse(localStorage.getItem(currentName));
+        
+        // Remove old list and create new one
+        localStorage.removeItem(currentName);
+        localStorage.setItem(newName, JSON.stringify(items));
+        
+        // Update selector
+        loadAllLists();
+        listSelector.value = newName;
     }
 }
 
