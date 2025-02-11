@@ -1,34 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>List Maker</title>
-  <!-- Optionally include a modern font – e.g. Roboto -->
-  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <!-- Load a modern font -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header class="header">
+    <button id="openSidenav" class="menu-btn">&#9776;</button>
     <h1>List Maker</h1>
   </header>
+
+  <!-- Side Navigation Menu -->
+  <div id="sidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <div id="listMenu">
+      <!-- Lists will be dynamically added here -->
+    </div>
+  </div>
+
   <main class="container">
-    <div class="list-controls">
-      <button type="button" id="newListButton" class="button">Create New List</button>
-      <select id="listSelector">
-        <option value="" disabled selected>Select a list</option>
-      </select>
+    <div class="controls">
+      <button type="button" id="newListButton" class="button">New List</button>
       <button type="button" id="renameListButton" class="button">Rename List</button>
       <button type="button" id="deleteListButton" class="button">Delete List</button>
+      <button type="button" id="scanButton" class="button">Scan Items</button>
     </div>
 
     <form id="groceryForm">
-      <input type="text" id="item" maxlength="50" placeholder="Add an item" autocomplete="off" required>
+      <input type="text" id="item" maxlength="50" placeholder="Add an item" autocomplete="off" required />
       <button type="button" id="addButton" class="button">Add Item</button>
     </form>
-    
-    <button type="button" id="shareButton" class="button share-button">Share List</button>
-    
+
+    <button type="button" id="shareButton" class="button">Share List</button>
+
     <table id="groceryList">
       <tr>
         <th>Item</th>
@@ -36,6 +44,17 @@
     </table>
   </main>
 
+  <!-- Scanner Modal -->
+  <div id="scannerModal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close" onclick="closeScanner()">&times;</span>
+      <video id="video" autoplay playsinline></video>
+      <button id="captureButton" class="button">Capture Scan</button>
+    </div>
+  </div>
+
+  <!-- Load Tesseract.js for OCR (make sure this script is available in your project) -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@v2.1.5/dist/tesseract.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
