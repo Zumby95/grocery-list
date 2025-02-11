@@ -1,128 +1,90 @@
-body {
-    font-family: 'Inter', sans-serif;
-    background-color: #f4f7f9;
-    color: #333;
+* {
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
+    box-sizing: border-box;
 }
 
-.container {
-    max-width: 500px;
-    width: 90%;
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    margin-top: 20px;
+body {
+    font-family: Arial, sans-serif;
     padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
-form {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
+#groceryForm {
     margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
 }
 
-input[type="text"] {
-    flex: 1;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 16px;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-    outline: none;
+#item {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
-button {
-    padding: 12px 20px;
-    background: #4CAF50;
+#addButton {
+    padding: 8px 16px;
+    background-color: #4CAF50;
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 4px;
     cursor: pointer;
-    transition: background 0.3s ease;
 }
 
-button:hover {
-    background: #45a049;
+#addButton:hover {
+    background-color: #45a049;
 }
 
-table {
+#groceryList {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
 }
 
-th, td {
-    padding: 8px;
-    text-align: left;
+#groceryList tr {
+    border-bottom: 1px solid #eee;
 }
 
-tr:nth-child(even) {
-    background-color: #f9f9f9;
+#groceryList td {
+    padding: 12px 8px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.drag-handle {
+    cursor: move;
+    color: #999;
+    margin-right: 10px;
+    user-select: none;
 }
 
 .delete-btn {
-    display: inline-block;
-    background: none;
+    background-color: #ff4444;
+    color: white;
     border: none;
-    color: red;
-    font-size: 18px;
-    font-weight: bold;
+    border-radius: 4px;
+    padding: 6px 12px;
     cursor: pointer;
-    right: 36.5%;
-    position: absolute;
+    margin-left: auto;
 }
 
 .delete-btn:hover {
-    color: darkred;
+    background-color: #cc0000;
 }
 
-table tr {
-    transition: all 0.3s ease;
-}
-
-table tr.fade-out {
-    opacity: 0;
-    transform: translateX(20px);
-}
-
-/* Visual indication for dragging */
 .dragging {
-    opacity: 0.6;
-    background-color: #d1e7dd;
-    transform: scale(1.02);
-    transition: all 0.2s ease;
+    opacity: 0.5;
+    background-color: #f5f5f5;
 }
 
 .drag-over {
-    border: 2px dashed #4CAF50;
-    transition: all 0.2s ease;
+    border-top: 2px solid #4CAF50;
 }
 
-/* Mobile-friendly drag handle */
-.drag-handle {
-    cursor: grab;
-    font-size: 16px; /* Increase size for better visibility on mobile */
-    padding-right: 0px;
-    color: #888;
-    background-color: #f0f0f0; /* Light background for visibility */
-    border-radius: 8px;
-    margin-right:5px;
-}
-
-.drag-handle:hover {
-    color: #333;
-    background-color: #e0e0e0; /* Slight change on hover */
-}
-
-/* Ensure the drag handle appears at the start of the item */
-td {
-    display: flex;
-    align-items: center;
+.fade-out {
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
 }
