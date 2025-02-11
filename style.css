@@ -68,17 +68,15 @@ tr:nth-child(even) {
 }
 
 .delete-btn {
-    flex: 1;
+    display: inline-block;
     background: none;
     border: none;
     color: red;
     font-size: 18px;
     font-weight: bold;
     cursor: pointer;
-    text-align: right;
-    padding: 4px;
-    
-  
+    right: 10%;
+    position: absolute;
 }
 
 .delete-btn:hover {
