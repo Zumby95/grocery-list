@@ -11,6 +11,49 @@ body {
     margin: 0 auto;
 }
 
+.container {
+    width: 100%;
+}
+
+.list-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#listSelector {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#newListButton {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#newListButton:hover {
+    background-color: #45a049;
+}
+
+#deleteListButton {
+    padding: 8px 16px;
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#deleteListButton:hover {
+    background-color: #cc0000;
+}
+
 #groceryForm {
     margin-bottom: 20px;
     display: flex;
@@ -35,6 +78,20 @@ body {
 
 #addButton:hover {
     background-color: #45a049;
+}
+
+#shareButton {
+    padding: 8px 16px;
+    background-color: #00BFFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+#shareButton:hover {
+    background-color: #009ACD;
 }
 
 #groceryList {
@@ -87,17 +144,4 @@ body {
 .fade-out {
     opacity: 0;
     transition: opacity 0.3s ease-out;
-}
-
-#shareButton {
-    padding: 8px 16px;
-    background-color: #00BFFF;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-#shareButton:hover {
-    background-color: #009ACD;
 }
