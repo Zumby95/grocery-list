@@ -5,6 +5,9 @@ window.onload = function () {
         e.preventDefault();
         Add();
     });
+
+    // Add event listener for shareButton
+    document.getElementById('shareButton').addEventListener('click', generateShareableLink);
 };
 
 function Add() {
@@ -117,3 +120,44 @@ function sanitizeInput(input) {
     temp.textContent = input;
     return temp.innerHTML;
 }
+
+// Function to create a shareable URL
+function generateShareableLink() {
+    const table = document.getElementById('groceryList');
+    const items = [];
+
+    for (let i = 1; i < table.rows.length; i++) {
+        const cell = table.rows[i].cells[0];
+        const text = cell.childNodes[1].textContent.trim();
+        items.push(text);
+    }
+
+    const encodedItems = encodeURIComponent(JSON.stringify(items));
+    const shareableLink = `${window.location.href}?items=${encodedItems}`;
+    
+    // Display the link to the user
+    alert(`Shareable link: ${shareableLink}`);
+}
+
+// Function to load items from URL parameters
+function loadItemsFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const items = JSON.parse(decodeURIComponent(urlParams.get('items'))) || [];
+
+    const table = document.getElementById('groceryList');
+    items.forEach(item => {
+        const newRow = createRow(item);
+        table.appendChild(newRow);
+    });
+}
+
+// Call this on page load to check if the URL contains shared items
+window.onload = function () {
+    loadItemsFromURL();
+    loadItems();
+    document.getElementById('addButton').addEventListener('click', Add);
+    document.getElementById('groceryForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        Add();
+    });
+};
