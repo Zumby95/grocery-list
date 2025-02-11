@@ -105,7 +105,7 @@ table tr.fade-out {
 /* Mobile-friendly drag handle */
 .drag-handle {
     cursor: grab;
-    font-size: 28px; /* Increase size for better visibility on mobile */
+    font-size: 15px; /* Increase size for better visibility on mobile */
     padding-right: 12px;
     color: #888;
     background-color: #f0f0f0; /* Light background for visibility */
