@@ -29,11 +29,12 @@ body {
     color: #fff;
     display: flex;
     flex-direction: column;
+    border-right: 1px solid rgba(0, 0, 0, 0.1); /* Add subtle separation */
 }
 
 .sidebar-header {
     padding: 20px;
-    text-align: center;
+    text-align: left;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -58,6 +59,7 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
+    font-size: 1.2em; /* Increase touch target size */
 }
 
 .sidebar-nav li a:hover {
@@ -74,13 +76,14 @@ body {
 
 .sidebar-footer a {
     display: block;
-    padding: 10px 15px;
+    padding: 12px 15px;
     text-decoration: none;
     color: #ddd;
     background-color: rgba(255, 255, 255, 0.05);
     border-radius: 5px;
     text-align: center;
     transition: background-color 0.3s;
+    font-size: 1.1em; /* Increase touch target size */
 }
 
 .sidebar-footer a:hover {
@@ -93,34 +96,38 @@ body {
     padding: 20px;
     display: flex;
     flex-direction: column;
+    align-items: stretch; /* Stretch items to fill the container */
 }
 
 /* Add Item Section */
 .add-item-section {
     margin-bottom: 20px;
+    width: 100%; /* Ensure full width */
 }
 
 #groceryForm {
     display: flex;
     gap: 10px;
+    width: 100%; /* Ensure full width */
 }
 
 #item {
     flex-grow: 1;
-    padding: 12px;
+    padding: 15px;
     border: 1px solid #ddd;
     border-radius: 5px;
-    font-size: 1em;
+    font-size: 1.2em; /* Increase input text size */
 }
 
 #addButton {
     background-color: #5cb85c;
     color: white;
     border: none;
-    padding: 12px 20px;
+    padding: 15px 20px;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
+    font-size: 1.2em; /* Increase button text size */
 }
 
 #addButton:hover {
@@ -130,6 +137,7 @@ body {
 /* List Section */
 .list-section {
     flex-grow: 1;
+    width: 100%; /* Ensure full width */
 }
 
 #groceryList {
@@ -144,6 +152,7 @@ body {
     border-bottom: 2px solid #ddd;
     color: #555;
     font-weight: 500;
+    font-size: 1.2em; /* Increase heading text size */
 }
 
 #groceryList tbody tr {
@@ -155,21 +164,24 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-size: 1.1em; /* Increase list item text size */
 }
 
 .drag-handle {
     cursor: grab;
     color: #888;
+    font-size: 1.3em; /* Increase drag handle size */
 }
 
 .delete-btn {
     background-color: #d9534f;
     color: white;
     border: none;
-    padding: 8px 12px;
+    padding: 10px 15px;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
+    font-size: 1em; /* Increase delete button text size */
 }
 
 .delete-btn:hover {
@@ -187,12 +199,6 @@ body {
     border: 2px dashed #ccc;
 }
 
-.list-menu a {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
 /* Responsive Design */
 @media (max-width: 768px) {
     .container {
@@ -204,6 +210,7 @@ body {
         width: 100%;
         max-height: 200px;
         overflow-y: auto;
+        border-right: none; /* Remove border on mobile */
     }
 
     .sidebar-header {
@@ -234,5 +241,14 @@ body {
         flex-direction: row;
         justify-content: space-around;
         padding: 10px;
+    }
+
+    .main-content {
+        padding: 10px; /* Reduce padding on smaller screens */
+    }
+
+    #item,
+    #addButton {
+        padding: 12px; /* Adjust padding for form elements */
     }
 }
