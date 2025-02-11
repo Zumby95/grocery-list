@@ -5,6 +5,7 @@ window.onload = function () {
     loadAllLists();
     setupSharedList();
 
+    // Event Listeners
     document.getElementById("newListButton").addEventListener("click", createNewList);
     document.getElementById("addButton").addEventListener("click", Add);
     document.getElementById("groceryForm").addEventListener("submit", function (e) {
@@ -16,13 +17,22 @@ window.onload = function () {
     document.getElementById("renameListButton").addEventListener("click", renameList);
     document.getElementById("scanButton").addEventListener("click", openScanner);
     document.getElementById("captureButton").addEventListener("click", captureScan);
+
+    // Sidebar toggle functionality
+    document.getElementById("sidebarToggle").addEventListener("click", toggleSidebar);
 };
+
+// ========================
+// Sidebar Toggle Function
+// ========================
+function toggleSidebar() {
+    const sidebar = document.querySelector(".sidebar");
+    sidebar.classList.toggle("show");
+}
 
 // ========================
 // Side Navigation Functions
 // ========================
-
-// Load lists into the side menu
 function loadAllLists() {
     const allLists = Object.keys(localStorage);
     const listMenu = document.getElementById("listMenu");
@@ -36,6 +46,7 @@ function loadAllLists() {
         a.addEventListener("click", () => {
             currentListName = listName;
             loadItems(listName);
+            highlightCurrentList(listName); // Highlight the active list
         });
         listMenu.appendChild(a);
     });
@@ -46,10 +57,21 @@ function getListCount(listName) {
     return items.length;
 }
 
+function highlightCurrentList(listName) {
+    const listMenu = document.getElementById("listMenu");
+    const links = listMenu.querySelectorAll("a");
+    links.forEach((link) => {
+        if (link.textContent.startsWith(listName)) {
+            link.classList.add("active-list");
+        } else {
+            link.classList.remove("active-list");
+        }
+    });
+}
+
 // ========================
 // Shared List Setup from URL (if any)
 // ========================
-
 function setupSharedList() {
     const urlParams = new URLSearchParams(window.location.search);
     const listName = urlParams.get("list");
@@ -106,7 +128,6 @@ function setupSharedList() {
 // ========================
 // List Operations
 // ========================
-
 function createNewList() {
     const listNameInput = prompt("Enter a name for your new list:");
     if (listNameInput && listNameInput.trim()) {
@@ -168,15 +189,18 @@ function Add() {
 
 function createRow(itemText) {
     const newRow = document.createElement("tr");
-    newRow.draggable = true;
 
     const cell = document.createElement("td");
+
+    // Add drag handle
     const dragHandle = document.createElement("span");
     dragHandle.className = "drag-handle";
     dragHandle.textContent = "☰";
 
+    // Add text node
     const textNode = document.createTextNode(` ${itemText} `);
 
+    // Add delete button
     const deleteBtn = document.createElement("button");
     deleteBtn.className = "delete-btn";
     deleteBtn.textContent = "X";
@@ -188,111 +212,13 @@ function createRow(itemText) {
         }, 300);
     };
 
+    // Append elements to the cell
     cell.appendChild(dragHandle);
     cell.appendChild(textNode);
     cell.appendChild(deleteBtn);
     newRow.appendChild(cell);
 
-    setupDragEvents(newRow);
     return newRow;
-}
-
-function setupDragEvents(row) {
-    let isDragging = false;
-    let startY = 0;
-    let currentY = 0;
-    let initialRow;
-
-    // Touch events
-    row.addEventListener(
-        "touchstart",
-        (e) => {
-            const touch = e.touches[0];
-            const handleElement = e.target.closest(".drag-handle");
-            if (!handleElement) return;
-            isDragging = true;
-            startY = touch.pageY;
-            initialRow = row;
-            row.classList.add("dragging");
-
-            const rows = Array.from(row.parentElement.children);
-            rows.forEach((r) => {
-                r.initialPosition = r.getBoundingClientRect().top;
-            });
-        },
-        { passive: false }
-    );
-
-    row.addEventListener(
-        "touchmove",
-        (e) => {
-            if (!isDragging) return;
-            e.preventDefault();
-            const touch = e.touches[0];
-            currentY = touch.pageY;
-            const deltaY = currentY - startY;
-            row.style.transform = `translateY(${deltaY}px)`;
-
-            const rows = Array.from(row.parentElement.children);
-            const hoverRow = rows.find((r) => {
-                if (r === row) return false;
-                const rect = r.getBoundingClientRect();
-                return currentY >= rect.top && currentY <= rect.bottom;
-            });
-
-            if (hoverRow) {
-                const movingDown = deltaY > 0;
-                const siblingRow = movingDown ? hoverRow.nextElementSibling : hoverRow;
-                row.parentElement.insertBefore(row, siblingRow);
-                requestAnimationFrame(() => {
-                    row.style.transform = "";
-                    startY = touch.pageY;
-                });
-            }
-        },
-        { passive: false }
-    );
-
-    row.addEventListener("touchend", () => {
-        if (!isDragging) return;
-        isDragging = false;
-        row.classList.remove("dragging");
-        row.style.transform = "";
-        saveItems(currentListName);
-    });
-
-    // Mouse events
-    row.addEventListener("dragstart", (e) => {
-        e.dataTransfer.setData("text/plain", row.rowIndex);
-        row.classList.add("dragging");
-    });
-
-    row.addEventListener("dragend", () => {
-        row.classList.remove("dragging");
-        const tableRows = document.querySelectorAll("#groceryList tr");
-        tableRows.forEach((r) => r.classList.remove("drag-over"));
-        saveItems(currentListName);
-    });
-
-    row.addEventListener("dragover", (e) => {
-        e.preventDefault();
-        const table = row.parentElement;
-        const draggingRow = document.querySelector(".dragging");
-
-        if (draggingRow !== row) {
-            row.classList.add("drag-over");
-            table.insertBefore(draggingRow, row.nextSibling);
-        }
-    });
-
-    row.addEventListener("dragleave", () => {
-        row.classList.remove("drag-over");
-    });
-
-    row.addEventListener("drop", (e) => {
-        e.preventDefault();
-        row.classList.remove("drag-over");
-    });
 }
 
 function saveItems(listName) {
@@ -329,10 +255,9 @@ function deleteSelectedList() {
     }
 
     if (confirm(`Are you sure you want to delete the list "${currentListName}"?`)) {
-        // Remove the list from localStorage
         localStorage.removeItem(currentListName);
 
-        // Clear the current list display
+        // Clear current list display
         document.getElementById("groceryList").innerHTML = `<tr><th>Item</th></tr>`;
         currentListName = "";
         loadAllLists();
@@ -378,7 +303,6 @@ function sanitizeInput(input) {
 // ========================
 // Scanner Functions
 // ========================
-
 function openScanner() {
     const modal = document.getElementById("scannerModal");
     const video = document.getElementById("video");
@@ -388,10 +312,11 @@ function openScanner() {
     // Prefer rear camera if available
     const constraints = {
         video: { facingMode: { exact: "environment" } },
-        audio: false
+        audio: false,
     };
 
-    navigator.mediaDevices.getUserMedia(constraints)
+    navigator.mediaDevices
+        .getUserMedia(constraints)
         .then(function (stream) {
             videoStream = stream;
             video.srcObject = stream;
@@ -399,11 +324,12 @@ function openScanner() {
         })
         .catch(function (err) {
             console.error("Error accessing camera:", err);
-            alert("Error accessing camera. Please make sure you have granted camera permissions.");
+            alert(
+                "Error accessing camera. Please make sure you have granted camera permissions."
+            );
             closeScanner();
         });
 }
-
 
 function closeScanner() {
     const modal = document.getElementById("scannerModal");
@@ -412,19 +338,19 @@ function closeScanner() {
     modal.classList.add("hidden");
 
     if (videoStream) {
-        videoStream.getTracks().forEach(track => track.stop());
+        videoStream.getTracks().forEach((track) => track.stop());
         video.srcObject = null;
         videoStream = null;
     }
 }
-
 
 function captureScan() {
     const video = document.getElementById("video");
     const canvas = document.createElement("canvas");
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
-    const ctx = canvas.getContext('2d');
+    
+	    const ctx = canvas.getContext("2d");
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     canvas.toBlob(function (blob) {
@@ -433,25 +359,26 @@ function captureScan() {
             return;
         }
         performOCR(blob);
-    }, 'image/jpeg');
+    }, "image/jpeg");
 }
-
 
 function performOCR(imageBlob) {
     Tesseract.recognize(
         imageBlob,
-        'eng', // Specify language code (English in this case)
-        { logger: m => console.log(m) } // Optional logging
-    ).then(({ data: { text } }) => {
-        // OCR completed
-        console.log("OCR Result:", text);
-        processScannedText(text);
-        closeScanner();
-    }).catch(err => {
-        console.error("OCR Error:", err);
-        alert("OCR process failed. Please try again.");
-        closeScanner();
-    });
+        "eng", // Specify language code (English in this case)
+        { logger: (m) => console.log(m) } // Optional logging
+    )
+        .then(({ data: { text } }) => {
+            // OCR completed
+            console.log("OCR Result:", text);
+            processScannedText(text);
+            closeScanner();
+        })
+        .catch((err) => {
+            console.error("OCR Error:", err);
+            alert("OCR process failed. Please try again.");
+            closeScanner();
+        });
 }
 
 function processScannedText(text) {
@@ -460,9 +387,12 @@ function processScannedText(text) {
         return;
     }
 
-    const items = text.split('\n').map(item => item.trim()).filter(item => item);
+    const items = text
+        .split("\n")
+        .map((item) => item.trim())
+        .filter((item) => item);
     const table = document.getElementById("groceryList");
-    items.forEach(item => {
+    items.forEach((item) => {
         const sanitizedItem = sanitizeInput(item);
         const newRow = createRow(sanitizedItem);
         table.appendChild(newRow);
