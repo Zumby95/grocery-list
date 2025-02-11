@@ -20,17 +20,17 @@ function createNewList() {
     if (listName && listName.trim()) {
         // Save empty list to localStorage
         localStorage.setItem(listName.trim(), JSON.stringify([]));
-        
+
         // Add to selector
         const listSelector = document.getElementById('listSelector');
         const option = document.createElement('option');
         option.value = listName.trim();
         option.textContent = listName.trim();
         listSelector.appendChild(option);
-        
+
         // Select the new list
         listSelector.value = listName.trim();
-        
+
         // Clear current list display
         document.getElementById('groceryList').innerHTML = `<tr><th>Item</th></tr>`;
     }
@@ -97,9 +97,9 @@ function createRow(itemText) {
     const dragHandle = document.createElement('span');
     dragHandle.className = 'drag-handle';
     dragHandle.textContent = '☰';
-    
+
     const textNode = document.createTextNode(` ${itemText} `);
-    
+
     const deleteBtn = document.createElement('button');
     deleteBtn.className = 'delete-btn';
     deleteBtn.textContent = 'X';
@@ -121,91 +121,93 @@ function createRow(itemText) {
 }
 
 function setupDragEvents(row) {
+    let isDragging = false;
+    let startY = 0;
+    let currentY = 0;
+    let initialRow;
 
-    function setupDragEvents(row) {
-        let isDragging = false;
-        let startY = 0;
-        let currentY = 0;
-        let initialRow;
+    // Touch events
+    row.addEventListener('touchstart', (e) => {
+        const touch = e.touches[0];
+        const handleElement = e.target.closest('.drag-handle');
+        if (!handleElement) return;
         
-        // Touch events
-        row.addEventListener('touchstart', (e) => {
-            const touch = e.touches[0];
-            const handleElement = e.target.closest('.drag-handle');
-            
-            if (!handleElement) return;
-            
-            isDragging = true;
-            startY = touch.pageY;
-            initialRow = row;
-            row.classList.add('dragging');
-            
-            // Store initial positions of all rows
-            const rows = Array.from(row.parentElement.children);
-            rows.forEach(r => {
-                r.initialPosition = r.getBoundingClientRect().top;
-            });
-        }, { passive: false });
-    
-        row.addEventListener('touchmove', (e) => {
-            if (!isDragging) return;
-            e.preventDefault();
-            
-            const touch = e.touches[0];
-            currentY = touch.pageY;
-            const deltaY = currentY - startY;
-            
-            // Move the dragged row
-            row.style.transform = `translateY(${deltaY}px)`;
-            
-            // Find the row we're hovering over
-            const rows = Array.from(row.parentElement.children);
-            const hoverRow = rows.find(r => {
-                if (r === row) return false;
-                const rect = r.getBoundingClientRect();
-                return currentY >= rect.top && currentY <= rect.bottom;
-            });
-            
-            if (hoverRow) {
-                const movingDown = deltaY > 0;
-                const siblingRow = movingDown ? hoverRow.nextElementSibling : hoverRow;
-                row.parentElement.insertBefore(row, siblingRow);
-                
-                // Reset transform after moving
-                requestAnimationFrame(() => {
-                    row.style.transform = '';
-                    startY = touch.pageY;
-                });
-            }
-        }, { passive: false });
-    
-        row.addEventListener('touchend', () => {
-            if (!isDragging) return;
-            isDragging = false;
-            row.classList.remove('dragging');
-            row.style.transform = '';
-            saveItems(document.getElementById('listSelector').value);
+        isDragging = true;
+        startY = touch.pageY;
+        initialRow = row;
+        row.classList.add('dragging');
+        
+        const rows = Array.from(row.parentElement.children);
+        rows.forEach(r => {
+            r.initialPosition = r.getBoundingClientRect().top;
         });
-    
+    }, { passive: false });
 
+    row.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        
+        const touch = e.touches[0];
+        currentY = touch.pageY;
+        const deltaY = currentY - startY;
+        
+        row.style.transform = `translateY(${deltaY}px)`;
+        
+        const rows = Array.from(row.parentElement.children);
+        const hoverRow = rows.find(r => {
+            if (r === row) return false;
+            const rect = r.getBoundingClientRect();
+            return currentY >= rect.top && currentY <= rect.bottom;
+        });
+        
+        if (hoverRow) {
+            const movingDown = deltaY > 0;
+            const siblingRow = movingDown ? hoverRow.nextElementSibling : hoverRow;
+            row.parentElement.insertBefore(row, siblingRow);
+            
+            requestAnimationFrame(() => {
+                row.style.transform = '';
+                startY = touch.pageY;
+            });
+        }
+    }, { passive: false });
+
+    row.addEventListener('touchend', () => {
+        if (!isDragging) return;
+        isDragging = false;
+        row.classList.remove('dragging');
+        row.style.transform = '';
+        saveItems(document.getElementById('listSelector').value);
+    });
+
+    // Mouse drag events with fixes
     row.addEventListener('dragstart', (e) => {
+        e.stopPropagation();
         e.dataTransfer.setData('text/plain', row.rowIndex);
+        e.dataTransfer.dropEffect = "move";
+        // Hide the original element momentarily to allow drag image creation
+        setTimeout(() => {
+            row.classList.add('hidden');
+        }, 0);
         row.classList.add('dragging');
     });
 
-    row.addEventListener('dragend', () => {
+    row.addEventListener('dragend', (e) => {
+        e.stopPropagation();
         row.classList.remove('dragging');
+        row.classList.remove('hidden');
         const tableRows = document.querySelectorAll('#groceryList tr');
-        tableRows.forEach(row => row.classList.remove('drag-over'));
+        tableRows.forEach(r => r.classList.remove('drag-over'));
         saveItems(document.getElementById('listSelector').value);
     });
 
     row.addEventListener('dragover', (e) => {
         e.preventDefault();
+        e.stopPropagation();
         const table = row.parentElement;
         const draggingRow = document.querySelector('.dragging');
         
-        if (draggingRow !== row) {
+        if (draggingRow && draggingRow !== row) {
             row.classList.add('drag-over');
             table.insertBefore(draggingRow, row.nextSibling);
         }
@@ -219,7 +221,7 @@ function setupDragEvents(row) {
         e.preventDefault();
         row.classList.remove('drag-over');
     });
-}}
+}
 
 function saveItems(listName) {
     const table = document.getElementById('groceryList');
@@ -284,8 +286,6 @@ function deleteSelectedList() {
 
         // Remove the list from the dropdown
         listSelector.remove(listSelector.selectedIndex);
-
-        // Reset the selection to the default option
         listSelector.value = "";
 
         // Clear the current list display
@@ -308,7 +308,6 @@ function setupListSelector() {
             if (saveChoice) {
                 // Check if a list with this name already exists
                 if (localStorage.getItem(listName)) {
-                    // Ask for a new name to avoid overwriting
                     let newListName = prompt(`A list named "${listName}" already exists. Please enter a new name for this list:`, `${listName} (Shared)`);
                     
                     while (newListName && localStorage.getItem(newListName)) {
@@ -323,7 +322,6 @@ function setupListSelector() {
                         loadItems(newListName);
                     }
                 } else {
-                    // Save with original name if it doesn't exist
                     localStorage.setItem(listName, JSON.stringify(decodedItems));
                     loadAllLists();
                     const listSelector = document.getElementById('listSelector');
@@ -331,7 +329,6 @@ function setupListSelector() {
                     loadItems(listName);
                 }
             } else {
-                // Just display the shared list temporarily without saving
                 const table = document.getElementById('groceryList');
                 table.innerHTML = `<tr><th>Shared List: ${listName} (Not Saved)</th></tr>`;
                 decodedItems.forEach(item => {
@@ -340,7 +337,6 @@ function setupListSelector() {
                 });
             }
             
-            // Clear the URL parameters after handling
             window.history.replaceState({}, document.title, window.location.pathname);
         } catch (error) {
             console.error('Error loading shared list:', error);
@@ -349,7 +345,6 @@ function setupListSelector() {
     }
 }
 
-// Add new function for renaming lists
 function renameList() {
     const listSelector = document.getElementById('listSelector');
     const currentName = listSelector.value;
