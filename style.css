@@ -1,4 +1,4 @@
-/* Reset and base styling */
+/* Base Reset */
 * {
   margin: 0;
   padding: 0;
@@ -12,22 +12,67 @@ body {
   line-height: 1.6;
 }
 
-/* Header with a modern gradient */
+/* Header styling */
 .header {
-  background: linear-gradient(135deg, #4CAF50, #45a049);
-  color: white;
-  padding: 20px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #4caf50, #45a049);
+  color: #fff;
+  padding: 15px;
+}
+
+.menu-btn {
+  font-size: 24px;
+  background: none;
+  border: none;
+  color: #fff;
+  margin-right: 10px;
+  cursor: pointer;
 }
 
 .header h1 {
-  font-size: 2em;
-  margin: 0;
+  font-size: 1.8em;
 }
 
-/* Main container styled as a modern card */
+/* Side Navigation Menu (Slide-in) */
+.sidenav {
+  height: 100%;
+  width: 0; /* Hidden by default */
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  background-color: #333;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+.sidenav a {
+  padding: 10px 20px;
+  text-decoration: none;
+  font-size: 18px;
+  color: #ddd;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav a:hover {
+  color: #fff;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 36px;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* Main container styling */
 .container {
-  background: white;
+  background: #fff;
   max-width: 800px;
   margin: 20px auto;
   padding: 20px;
@@ -36,23 +81,19 @@ body {
 }
 
 /* Controls styling */
-.list-controls {
+.controls {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 20px;
 }
 
-#listSelector {
-  flex-grow: 1;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  min-width: 150px;
-  background-color: #fff;
+.controls .button {
+  max-width: 150px; /* Limit the buttons’ width */
+  flex: 1;
 }
 
-/* Form styling for a clean, mobile-friendly input */
+/* Form styling */
 #groceryForm {
   display: flex;
   flex-wrap: wrap;
@@ -67,27 +108,22 @@ body {
   border-radius: 6px;
 }
 
-/* Updated button styles for modern look and touch targets */
+/* Button styling */
 .button {
-  padding: 10px 20px;
-  background-color: #4CAF50;
+  padding: 10px;
+  background-color: #4caf50;
   color: white;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
   font-size: 1em;
-  flex-shrink: 0;
   touch-action: manipulation;
 }
 
 .button:hover {
   background-color: #45a049;
   transform: translateY(-2px);
-}
-
-#newListButton {
-  background-color: #4CAF50;
 }
 
 #deleteListButton {
@@ -99,22 +135,22 @@ body {
 }
 
 #renameListButton {
-  background-color: #FFA500;
+  background-color: #ffa500;
 }
 
 #renameListButton:hover {
-  background-color: #FF8C00;
+  background-color: #ff8c00;
 }
 
 #shareButton {
-  background-color: #00BFFF;
+  background-color: #00bfff;
 }
 
 #shareButton:hover {
-  background-color: #009ACD;
+  background-color: #009acd;
 }
 
-/* Table styling for a clean display */
+/* Table styling */
 #groceryList {
   width: 100%;
   border-collapse: collapse;
@@ -131,20 +167,18 @@ body {
 
 #groceryList tr {
   border-bottom: 1px solid #eee;
-  background-color: white;
+  background-color: #fff;
   touch-action: none;
 }
 
 #groceryList td {
   padding: 12px 8px;
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
   font-size: 1em;
 }
 
-/* Drag handle styling for intuitive touch interface */
 .drag-handle {
   cursor: grab;
   color: #666;
@@ -155,7 +189,6 @@ body {
   touch-action: none;
 }
 
-/* Delete button in table */
 .delete-btn {
   background-color: #ff4444;
   color: white;
@@ -164,14 +197,12 @@ body {
   padding: 6px 12px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  flex-shrink: 0;
 }
 
 .delete-btn:hover {
   background-color: #cc0000;
 }
 
-/* Visual feedback during dragging */
 .dragging {
   opacity: 0.8;
   background-color: #f8f8f8;
@@ -179,7 +210,7 @@ body {
 }
 
 .drag-over {
-  border-top: 2px solid #4CAF50;
+  border-top: 2px solid #4caf50;
 }
 
 .fade-out {
@@ -187,32 +218,63 @@ body {
   transition: opacity 0.3s ease-out;
 }
 
-/* Responsive adjustments for mobile devices */
+/* Modal styling for scanning */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  z-index: 1500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  position: relative;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.modal-content video {
+  width: 100%;
+  border-radius: 6px;
+}
+
+.modal-content .close {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Responsive adjustments */
 @media (max-width: 600px) {
-  body {
-    padding: 10px;
-  }
-  
   .header h1 {
-    font-size: 1.8em;
+    font-size: 1.5em;
   }
-  
   .container {
     margin: 10px auto;
     padding: 15px;
   }
-  
-  .list-controls,
-  #groceryForm {
+  .controls {
     flex-direction: column;
   }
-  
-  .button {
-    width: 100%;
+  .controls .button {
+    max-width: 100%;
     font-size: 1.1em;
   }
-  
-  #listSelector,
   #item {
     width: 100%;
   }
