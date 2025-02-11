@@ -9,19 +9,20 @@
 <body>
     <div class="container">
         <div class="list-controls">
-            <button type="button" id="newListButton">Create New List</button>
+            <button type="button" id="newListButton" class="button">Create New List</button>
             <select id="listSelector">
                 <option value="" disabled selected>Select a list</option>
             </select>
-            <button type="button" id="deleteListButton">Delete List</button>
+            <button type="button" id="renameListButton" class="button">Rename List</button>
+            <button type="button" id="deleteListButton" class="button">Delete List</button>
         </div>
 
         <form id="groceryForm">
-            <input type="text" id="item" maxlength="50" placeholder="Create your list" autocomplete="off" required>
-            <button type="button" id="addButton">Add Item</button>
+            <input type="text" id="item" maxlength="50" placeholder="Add an item" autocomplete="off" required>
+            <button type="button" id="addButton" class="button">Add Item</button>
         </form>
         
-        <button type="button" id="shareButton">Share List</button>
+        <button type="button" id="shareButton" class="button">Share List</button>
         
         <table id="groceryList">
             <tr>
