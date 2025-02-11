@@ -1,281 +1,238 @@
-/* Base Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
+/* General Styles */
 body {
-  font-family: 'Roboto', system-ui, sans-serif;
-  background-color: #f0f2f5;
-  color: #333;
-  line-height: 1.6;
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f7f7f7;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
 }
 
-/* Header styling */
-.header {
-  display: flex;
-  align-items: center;
-  background: linear-gradient(135deg, #4caf50, #45a049);
-  color: #fff;
-  padding: 15px;
-}
-
-.menu-btn {
-  font-size: 24px;
-  background: none;
-  border: none;
-  color: #fff;
-  margin-right: 10px;
-  cursor: pointer;
-}
-
-.header h1 {
-  font-size: 1.8em;
-}
-
-/* Side Navigation Menu (Slide-in) */
-.sidenav {
-  height: 100%;
-  width: 0; /* Hidden by default */
-  position: fixed;
-  z-index: 1000;
-  top: 0;
-  left: 0;
-  background-color: #333;
-  overflow-x: hidden;
-  transition: 0.5s;
-  padding-top: 60px;
-}
-
-.sidenav a {
-  padding: 10px 20px;
-  text-decoration: none;
-  font-size: 18px;
-  color: #ddd;
-  display: block;
-  transition: 0.3s;
-}
-
-.sidenav a:hover {
-  color: #fff;
-}
-
-.sidenav .closebtn {
-  position: absolute;
-  top: 10px;
-  right: 20px;
-  font-size: 36px;
-  color: #fff;
-  cursor: pointer;
-}
-
-/* Main container styling */
 .container {
-  background: #fff;
-  max-width: 800px;
-  margin: 20px auto;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin: 20px;
 }
 
-/* Controls styling */
-.controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 20px;
+/* Sidebar Styles */
+.sidebar {
+    width: 250px;
+    background: #343a40;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
 }
 
-.controls .button {
-  max-width: 150px; /* Limit the buttons’ width */
-  flex: 1;
+.sidebar-header {
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Form styling */
+.site-title {
+    font-size: 1.5em;
+    font-weight: 500;
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-nav li a {
+    display: block;
+    padding: 15px 20px;
+    color: #ddd;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sidebar-nav li a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-footer {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: auto;
+}
+
+.sidebar-footer a {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #ddd;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 5px;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.sidebar-footer a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Main Content Styles */
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Add Item Section */
+.add-item-section {
+    margin-bottom: 20px;
+}
+
 #groceryForm {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
 }
 
 #item {
-  flex-grow: 1;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+    flex-grow: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
 }
 
-/* Button styling */
-.button {
-  padding: 10px;
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  font-size: 1em;
-  touch-action: manipulation;
+#addButton {
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-.button:hover {
-  background-color: #45a049;
-  transform: translateY(-2px);
+#addButton:hover {
+    background-color: #4cae4c;
 }
 
-#deleteListButton {
-  background-color: #ff4444;
+/* List Section */
+.list-section {
+    flex-grow: 1;
 }
 
-#deleteListButton:hover {
-  background-color: #cc0000;
-}
-
-#renameListButton {
-  background-color: #ffa500;
-}
-
-#renameListButton:hover {
-  background-color: #ff8c00;
-}
-
-#shareButton {
-  background-color: #00bfff;
-}
-
-#shareButton:hover {
-  background-color: #009acd;
-}
-
-/* Table styling */
 #groceryList {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
+    width: 100%;
+    border-collapse: collapse;
 }
 
-#groceryList th {
-  text-align: left;
-  padding: 12px 8px;
-  background: #f7f7f7;
-  border-bottom: 2px solid #ccc;
-  font-weight: 700;
+#groceryList thead th {
+    text-align: left;
+    padding: 15px;
+    background-color: #f2f2f2;
+    border-bottom: 2px solid #ddd;
+    color: #555;
+    font-weight: 500;
 }
 
-#groceryList tr {
-  border-bottom: 1px solid #eee;
-  background-color: #fff;
-  touch-action: none;
+#groceryList tbody tr {
+    border-bottom: 1px solid #eee;
 }
 
-#groceryList td {
-  padding: 12px 8px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 1em;
+#groceryList tbody td {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .drag-handle {
-  cursor: grab;
-  color: #666;
-  margin-right: 10px;
-  user-select: none;
-  font-size: 1.2em;
-  padding: 5px;
-  touch-action: none;
+    cursor: grab;
+    color: #888;
 }
 
 .delete-btn {
-  background-color: #ff4444;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 6px 12px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 .delete-btn:hover {
-  background-color: #cc0000;
+    background-color: #c9302c;
+}
+
+/* Utility Classes */
+.fade-out {
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
 }
 
 .dragging {
-  opacity: 0.8;
-  background-color: #f8f8f8;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    background-color: #f0f0f0;
+    border: 2px dashed #ccc;
 }
 
-.drag-over {
-  border-top: 2px solid #4caf50;
+.list-menu a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.fade-out {
-  opacity: 0;
-  transition: opacity 0.3s ease-out;
-}
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        margin: 10px;
+    }
 
-/* Modal styling for scanning */
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.7);
-  z-index: 1500;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+    .sidebar {
+        width: 100%;
+        max-height: 200px;
+        overflow-y: auto;
+    }
 
-.modal-content {
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  position: relative;
-  width: 90%;
-  max-width: 400px;
-  text-align: center;
-}
+    .sidebar-header {
+        text-align: left;
+    }
 
-.modal-content video {
-  width: 100%;
-  border-radius: 6px;
-}
+    .site-title {
+        font-size: 1.2em;
+    }
 
-.modal-content .close {
-  position: absolute;
-  top: 10px;
-  right: 20px;
-  font-size: 28px;
-  cursor: pointer;
-}
+    .sidebar-nav ul {
+        display: flex;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
 
-.hidden {
-  display: none;
-}
+    .sidebar-nav li {
+        flex-shrink: 0;
+    }
 
-/* Responsive adjustments */
-@media (max-width: 600px) {
-  .header h1 {
-    font-size: 1.5em;
-  }
-  .container {
-    margin: 10px auto;
-    padding: 15px;
-  }
-  .controls {
-    flex-direction: column;
-  }
-  .controls .button {
-    max-width: 100%;
-    font-size: 1.1em;
-  }
-  #item {
-    width: 100%;
-  }
+    .sidebar-nav li a {
+        padding: 10px 15px;
+        border-bottom: none;
+        border-right: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .sidebar-footer {
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 10px;
+    }
 }
