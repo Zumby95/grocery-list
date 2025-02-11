@@ -15,7 +15,6 @@ window.onload = function () {
     document.getElementById("deleteListButton").addEventListener("click", deleteSelectedList);
     document.getElementById("renameListButton").addEventListener("click", renameList);
     document.getElementById("scanButton").addEventListener("click", openScanner);
-    document.getElementById("openSidenav").addEventListener("click", openNav);
     document.getElementById("captureButton").addEventListener("click", captureScan);
 };
 
@@ -23,30 +22,28 @@ window.onload = function () {
 // Side Navigation Functions
 // ========================
 
-function openNav() {
-    document.getElementById("sidenav").style.width = "250px";
-}
-
-function closeNav() {
-    document.getElementById("sidenav").style.width = "0";
-}
-
 // Load lists into the side menu
 function loadAllLists() {
     const allLists = Object.keys(localStorage);
     const listMenu = document.getElementById("listMenu");
     listMenu.innerHTML = ""; // Clear existing menu items
+
     allLists.forEach((listName) => {
+        const itemCount = getListCount(listName);
         const a = document.createElement("a");
         a.href = "javascript:void(0)";
-        a.textContent = listName;
+        a.innerHTML = `${listName} <span class="item-count">(${itemCount})</span>`;
         a.addEventListener("click", () => {
             currentListName = listName;
             loadItems(listName);
-            closeNav();
         });
         listMenu.appendChild(a);
     });
+}
+
+function getListCount(listName) {
+    const items = JSON.parse(localStorage.getItem(listName)) || [];
+    return items.length;
 }
 
 // ========================
@@ -62,18 +59,21 @@ function setupSharedList() {
         try {
             const decodedItems = JSON.parse(decodeURIComponent(items));
             const saveChoice = confirm(`Would you like to save "${listName}" to your lists?`);
+
             if (saveChoice) {
                 if (localStorage.getItem(listName)) {
                     let newListName = prompt(
                         `A list named "${listName}" already exists. Please enter a new name for this list:`,
                         `${listName} (Shared)`
                     );
+
                     while (newListName && localStorage.getItem(newListName)) {
                         newListName = prompt(
                             `A list named "${newListName}" already exists. Please enter a different name:`,
                             `${newListName} (1)`
                         );
                     }
+
                     if (newListName) {
                         localStorage.setItem(newListName, JSON.stringify(decodedItems));
                         currentListName = newListName;
@@ -94,6 +94,7 @@ function setupSharedList() {
                     table.appendChild(newRow);
                 });
             }
+
             window.history.replaceState({}, document.title, window.location.pathname);
         } catch (error) {
             console.error("Error loading shared list:", error);
@@ -127,7 +128,6 @@ function handleShareButton() {
     const items = [];
     for (let i = 1; i < table.rows.length; i++) {
         const cell = table.rows[i].cells[0];
-        // Assumes that the text node is at index 1 (after the drag handle)
         const text = cell.childNodes[1].textContent.trim();
         items.push(text);
     }
@@ -306,6 +306,7 @@ function saveItems(listName) {
     }
 
     localStorage.setItem(listName, JSON.stringify(items));
+    loadAllLists();
 }
 
 function loadItems(listName) {
@@ -379,92 +380,92 @@ function sanitizeInput(input) {
 // ========================
 
 function openScanner() {
-    const modal = document.getElementById("scannerModal");
-    const video = document.getElementById("video");
-
-    modal.classList.remove("hidden");
-
-    // Prefer rear camera if available
-    const constraints = {
-        video: { facingMode: { exact: "environment" } },
-        audio: false
-    };
-
-    navigator.mediaDevices.getUserMedia(constraints)
-        .then(function (stream) {
-            videoStream = stream;
-            video.srcObject = stream;
-            video.play();
-        })
-        .catch(function (err) {
-            console.error("Error accessing camera:", err);
-            alert("Error accessing camera. Please make sure you have granted camera permissions.");
+        const modal = document.getElementById("scannerModal");
+        const video = document.getElementById("video");
+    
+        modal.classList.remove("hidden");
+    
+        // Prefer rear camera if available
+        const constraints = {
+            video: { facingMode: { exact: "environment" } },
+            audio: false
+        };
+    
+        navigator.mediaDevices.getUserMedia(constraints)
+            .then(function (stream) {
+                videoStream = stream;
+                video.srcObject = stream;
+                video.play();
+            })
+            .catch(function (err) {
+                console.error("Error accessing camera:", err);
+                alert("Error accessing camera. Please make sure you have granted camera permissions.");
+                closeScanner();
+            });
+    }
+    
+    
+    function closeScanner() {
+        const modal = document.getElementById("scannerModal");
+        const video = document.getElementById("video");
+    
+        modal.classList.add("hidden");
+    
+        if (videoStream) {
+            videoStream.getTracks().forEach(track => track.stop());
+            video.srcObject = null;
+            videoStream = null;
+        }
+    }
+    
+    
+    function captureScan() {
+        const video = document.getElementById("video");
+        const canvas = document.createElement("canvas");
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    
+        canvas.toBlob(function (blob) {
+            if (!blob) {
+                console.error("Blob is null");
+                return;
+            }
+            performOCR(blob);
+        }, 'image/jpeg');
+    }
+    
+    
+    function performOCR(imageBlob) {
+        Tesseract.recognize(
+            imageBlob,
+            'eng', // Specify language code (English in this case)
+            { logger: m => console.log(m) } // Optional logging
+        ).then(({ data: { text } }) => {
+            // OCR completed
+            console.log("OCR Result:", text);
+            processScannedText(text);
+            closeScanner();
+        }).catch(err => {
+            console.error("OCR Error:", err);
+            alert("OCR process failed. Please try again.");
             closeScanner();
         });
-}
-
-
-function closeScanner() {
-    const modal = document.getElementById("scannerModal");
-    const video = document.getElementById("video");
-
-    modal.classList.add("hidden");
-
-    if (videoStream) {
-        videoStream.getTracks().forEach(track => track.stop());
-        video.srcObject = null;
-        videoStream = null;
     }
-}
-
-
-function captureScan() {
-    const video = document.getElementById("video");
-    const canvas = document.createElement("canvas");
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-    canvas.toBlob(function (blob) {
-        if (!blob) {
-            console.error("Blob is null");
+    
+    function processScannedText(text) {
+        if (!currentListName) {
+            alert("Please select a list first.");
             return;
         }
-        performOCR(blob);
-    }, 'image/jpeg');
-}
-
-
-function performOCR(imageBlob) {
-    Tesseract.recognize(
-        imageBlob,
-        'eng', // Specify language code (English in this case)
-        { logger: m => console.log(m) } // Optional logging
-    ).then(({ data: { text } }) => {
-        // OCR completed
-        console.log("OCR Result:", text);
-        processScannedText(text);
-        closeScanner();
-    }).catch(err => {
-        console.error("OCR Error:", err);
-        alert("OCR process failed. Please try again.");
-        closeScanner();
-    });
-}
-
-function processScannedText(text) {
-    if (!currentListName) {
-        alert("Please select a list first.");
-        return;
+    
+        const items = text.split('\n').map(item => item.trim()).filter(item => item);
+        const table = document.getElementById("groceryList");
+        items.forEach(item => {
+            const sanitizedItem = sanitizeInput(item);
+            const newRow = createRow(sanitizedItem);
+            table.appendChild(newRow);
+        });
+        saveItems(currentListName);
     }
-
-    const items = text.split('\n').map(item => item.trim()).filter(item => item);
-    const table = document.getElementById("groceryList");
-    items.forEach(item => {
-        const sanitizedItem = sanitizeInput(item);
-        const newRow = createRow(sanitizedItem);
-        table.appendChild(newRow);
-    });
-    saveItems(currentListName);
-}
