@@ -380,92 +380,92 @@ function sanitizeInput(input) {
 // ========================
 
 function openScanner() {
-        const modal = document.getElementById("scannerModal");
-        const video = document.getElementById("video");
-    
-        modal.classList.remove("hidden");
-    
-        // Prefer rear camera if available
-        const constraints = {
-            video: { facingMode: { exact: "environment" } },
-            audio: false
-        };
-    
-        navigator.mediaDevices.getUserMedia(constraints)
-            .then(function (stream) {
-                videoStream = stream;
-                video.srcObject = stream;
-                video.play();
-            })
-            .catch(function (err) {
-                console.error("Error accessing camera:", err);
-                alert("Error accessing camera. Please make sure you have granted camera permissions.");
-                closeScanner();
-            });
-    }
-    
-    
-    function closeScanner() {
-        const modal = document.getElementById("scannerModal");
-        const video = document.getElementById("video");
-    
-        modal.classList.add("hidden");
-    
-        if (videoStream) {
-            videoStream.getTracks().forEach(track => track.stop());
-            video.srcObject = null;
-            videoStream = null;
-        }
-    }
-    
-    
-    function captureScan() {
-        const video = document.getElementById("video");
-        const canvas = document.createElement("canvas");
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    
-        canvas.toBlob(function (blob) {
-            if (!blob) {
-                console.error("Blob is null");
-                return;
-            }
-            performOCR(blob);
-        }, 'image/jpeg');
-    }
-    
-    
-    function performOCR(imageBlob) {
-        Tesseract.recognize(
-            imageBlob,
-            'eng', // Specify language code (English in this case)
-            { logger: m => console.log(m) } // Optional logging
-        ).then(({ data: { text } }) => {
-            // OCR completed
-            console.log("OCR Result:", text);
-            processScannedText(text);
-            closeScanner();
-        }).catch(err => {
-            console.error("OCR Error:", err);
-            alert("OCR process failed. Please try again.");
+    const modal = document.getElementById("scannerModal");
+    const video = document.getElementById("video");
+
+    modal.classList.remove("hidden");
+
+    // Prefer rear camera if available
+    const constraints = {
+        video: { facingMode: { exact: "environment" } },
+        audio: false
+    };
+
+    navigator.mediaDevices.getUserMedia(constraints)
+        .then(function (stream) {
+            videoStream = stream;
+            video.srcObject = stream;
+            video.play();
+        })
+        .catch(function (err) {
+            console.error("Error accessing camera:", err);
+            alert("Error accessing camera. Please make sure you have granted camera permissions.");
             closeScanner();
         });
+}
+
+
+function closeScanner() {
+    const modal = document.getElementById("scannerModal");
+    const video = document.getElementById("video");
+
+    modal.classList.add("hidden");
+
+    if (videoStream) {
+        videoStream.getTracks().forEach(track => track.stop());
+        video.srcObject = null;
+        videoStream = null;
     }
-    
-    function processScannedText(text) {
-        if (!currentListName) {
-            alert("Please select a list first.");
+}
+
+
+function captureScan() {
+    const video = document.getElementById("video");
+    const canvas = document.createElement("canvas");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    canvas.toBlob(function (blob) {
+        if (!blob) {
+            console.error("Blob is null");
             return;
         }
-    
-        const items = text.split('\n').map(item => item.trim()).filter(item => item);
-        const table = document.getElementById("groceryList");
-        items.forEach(item => {
-            const sanitizedItem = sanitizeInput(item);
-            const newRow = createRow(sanitizedItem);
-            table.appendChild(newRow);
-        });
-        saveItems(currentListName);
+        performOCR(blob);
+    }, 'image/jpeg');
+}
+
+
+function performOCR(imageBlob) {
+    Tesseract.recognize(
+        imageBlob,
+        'eng', // Specify language code (English in this case)
+        { logger: m => console.log(m) } // Optional logging
+    ).then(({ data: { text } }) => {
+        // OCR completed
+        console.log("OCR Result:", text);
+        processScannedText(text);
+        closeScanner();
+    }).catch(err => {
+        console.error("OCR Error:", err);
+        alert("OCR process failed. Please try again.");
+        closeScanner();
+    });
+}
+
+function processScannedText(text) {
+    if (!currentListName) {
+        alert("Please select a list first.");
+        return;
     }
+
+    const items = text.split('\n').map(item => item.trim()).filter(item => item);
+    const table = document.getElementById("groceryList");
+    items.forEach(item => {
+        const sanitizedItem = sanitizeInput(item);
+        const newRow = createRow(sanitizedItem);
+        table.appendChild(newRow);
+    });
+    saveItems(currentListName);
+}
