@@ -1,185 +1,219 @@
+/* Reset and base styling */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: Arial, sans-serif;
-    padding: 20px;
-    max-width: 800px;
-    margin: 0 auto;
+  font-family: 'Roboto', system-ui, sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
+  line-height: 1.6;
 }
 
+/* Header with a modern gradient */
+.header {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+.header h1 {
+  font-size: 2em;
+  margin: 0;
+}
+
+/* Main container styled as a modern card */
 .container {
-    width: 100%;
+  background: white;
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
+/* Controls styling */
 .list-controls {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-}
-
-.list-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-.list-title {
-    font-size: 1.2em;
-    font-weight: bold;
-    margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
 #listSelector {
-    flex-grow: 1;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    min-width: 150px;
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  min-width: 150px;
+  background-color: #fff;
 }
 
-.button {
-    padding: 8px 16px;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    touch-action: manipulation;
-}
-
-#newListButton {
-    background-color: #4CAF50;
-}
-
-#newListButton:hover {
-    background-color: #45a049;
-}
-
-#deleteListButton {
-    background-color: #ff4444;
-}
-
-#deleteListButton:hover {
-    background-color: #cc0000;
-}
-
-#renameListButton {
-    background-color: #FFA500;
-}
-
-#renameListButton:hover {
-    background-color: #FF8C00;
-}
-
+/* Form styling for a clean, mobile-friendly input */
 #groceryForm {
-    margin-bottom: 20px;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
 #item {
-    flex-grow: 1;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    min-width: 200px;
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
 }
 
-#addButton {
-    background-color: #4CAF50;
+/* Updated button styles for modern look and touch targets */
+.button {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-size: 1em;
+  flex-shrink: 0;
+  touch-action: manipulation;
 }
 
-#addButton:hover {
-    background-color: #45a049;
+.button:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
+}
+
+#newListButton {
+  background-color: #4CAF50;
+}
+
+#deleteListButton {
+  background-color: #ff4444;
+}
+
+#deleteListButton:hover {
+  background-color: #cc0000;
+}
+
+#renameListButton {
+  background-color: #FFA500;
+}
+
+#renameListButton:hover {
+  background-color: #FF8C00;
 }
 
 #shareButton {
-    background-color: #00BFFF;
-    margin-bottom: 20px;
+  background-color: #00BFFF;
 }
 
 #shareButton:hover {
-    background-color: #009ACD;
+  background-color: #009ACD;
 }
 
+/* Table styling for a clean display */
 #groceryList {
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+#groceryList th {
+  text-align: left;
+  padding: 12px 8px;
+  background: #f7f7f7;
+  border-bottom: 2px solid #ccc;
+  font-weight: 700;
 }
 
 #groceryList tr {
-    border-bottom: 1px solid #eee;
-    background-color: white;
-    touch-action: none;
+  border-bottom: 1px solid #eee;
+  background-color: white;
+  touch-action: none;
 }
 
 #groceryList td {
-    padding: 12px 8px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  padding: 12px 8px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1em;
 }
 
+/* Drag handle styling for intuitive touch interface */
 .drag-handle {
-    cursor: move;
-    color: #999;
-    margin-right: 10px;
-    user-select: none;
-    padding: 0 10px;
-    touch-action: none;
+  cursor: grab;
+  color: #666;
+  margin-right: 10px;
+  user-select: none;
+  font-size: 1.2em;
+  padding: 5px;
+  touch-action: none;
 }
 
-.item-content {
-    flex-grow: 1;
-    margin: 0 10px;
-}
-
+/* Delete button in table */
 .delete-btn {
-    background-color: #ff4444;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 6px 12px;
-    cursor: pointer;
-    margin-left: auto;
+  background-color: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  flex-shrink: 0;
 }
 
 .delete-btn:hover {
-    background-color: #cc0000;
+  background-color: #cc0000;
 }
 
+/* Visual feedback during dragging */
 .dragging {
-    opacity: 0.9;
-    background-color: #f8f8f8;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  opacity: 0.8;
+  background-color: #f8f8f8;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
 .drag-over {
-    border-top: 2px solid #4CAF50;
+  border-top: 2px solid #4CAF50;
 }
 
 .fade-out {
-    opacity: 0;
-    transition: opacity 0.3s ease-out;
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
 }
 
+/* Responsive adjustments for mobile devices */
 @media (max-width: 600px) {
-    .list-controls {
-        flex-direction: column;
-    }
-    
-    #groceryForm {
-        flex-direction: column;
-    }
-    
-    .button {
-        width: 100%;
-    }
+  body {
+    padding: 10px;
+  }
+  
+  .header h1 {
+    font-size: 1.8em;
+  }
+  
+  .container {
+    margin: 10px auto;
+    padding: 15px;
+  }
+  
+  .list-controls,
+  #groceryForm {
+    flex-direction: column;
+  }
+  
+  .button {
+    width: 100%;
+    font-size: 1.1em;
+  }
+  
+  #listSelector,
+  #item {
+    width: 100%;
+  }
 }
