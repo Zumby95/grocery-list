@@ -16,20 +16,20 @@ body {
 .sidebar {
   position: fixed;
   top: 0;
-  left: -250px; /* Hidden by default */
+  left: -250px;
   width: 250px;
   height: 100%;
   background: #343a40;
   color: #fff;
   display: flex;
   flex-direction: column;
-  transition: transform 0.3s ease-in-out;
+  transition: left 0.3s ease-in-out;
   z-index: 1000;
 }
 
 /* When sidebar is toggled, slide into view */
 .sidebar.show {
-  transform: translateX(250px);
+  left: 0;
 }
 
 .sidebar-header {
@@ -112,10 +112,12 @@ body {
 }
 
 /* Hide toggle button on larger screens */
-@media (min-width: 768px) {
-  .sidebar-toggle {
-    display: none;
+@media (max-width: 768px) {
+  .sidebar {
+    width: 80%;
+    max-width: 250px;
   }
+}
   .sidebar {
     transform: translateX(0);
     position: relative;
