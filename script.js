@@ -1,401 +1,246 @@
-let currentListName = "";
-let videoStream = null;
+document.addEventListener("DOMContentLoaded", () => {
+  let lists = {};            // Object to hold multiple lists
+  let currentListId = null;  // The currently active list
 
-window.onload = function () {
-    loadAllLists();
-    setupSharedList();
+  // Initialize lists from localStorage, if any
+  if (localStorage.getItem("groceryLists")) {
+    lists = JSON.parse(localStorage.getItem("groceryLists"));
+  }
 
-    // Event Listeners
-    document.getElementById("newListButton").addEventListener("click", createNewList);
-    document.getElementById("addButton").addEventListener("click", Add);
-    document.getElementById("groceryForm").addEventListener("submit", function (e) {
+  // Grab essential elements
+  const sidebarToggle = document.getElementById("sidebarToggle");
+  const sidebar = document.querySelector(".sidebar");
+  const newListButton = document.getElementById("newListButton");
+  const listMenu = document.getElementById("listMenu");
+  const addButton = document.getElementById("addButton");
+  const itemInput = document.getElementById("item");
+  const groceryListTable = document.getElementById("groceryList").querySelector("tbody");
+  const deleteListButton = document.getElementById("deleteListButton");
+  const renameListButton = document.getElementById("renameListButton");
+  const shareButton = document.getElementById("shareButton");
+  const scanButton = document.getElementById("scanButton");
+  const scannerModal = document.getElementById("scannerModal");
+  const video = document.getElementById("video");
+  const captureButton = document.getElementById("captureButton");
+
+  // Toggle sidebar for mobile devices with touch support
+  function toggleSidebar() {
+    if (sidebar.classList.contains("show")) {
+      sidebar.classList.remove("show");
+      sidebar.classList.add("hidden");
+    } else {
+      sidebar.classList.remove("hidden");
+      sidebar.classList.add("show");
+    }
+  }
+  sidebarToggle.addEventListener("click", toggleSidebar);
+  sidebarToggle.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    toggleSidebar();
+  });
+
+  // Save lists to phone storage (localStorage)
+  function saveLists() {
+    localStorage.setItem("groceryLists", JSON.stringify(lists));
+  }
+
+  // Render the list items on the sidebar (with counts)
+  function renderListMenu() {
+    listMenu.innerHTML = "";
+    for (let listId in lists) {
+      const listData = lists[listId];
+      const a = document.createElement("a");
+      a.href = "#";
+      a.dataset.id = listId;
+      a.textContent = listData.name + " (" + listData.items.length + ")";
+      if (listId === currentListId) {
+        a.classList.add("active-list");
+      }
+      a.addEventListener("click", (e) => {
         e.preventDefault();
-        Add();
-    });
-    document.getElementById("shareButton").addEventListener("click", handleShareButton);
-    document.getElementById("deleteListButton").addEventListener("click", deleteSelectedList);
-    document.getElementById("renameListButton").addEventListener("click", renameList);
-    document.getElementById("scanButton").addEventListener("click", openScanner);
-    document.getElementById("captureButton").addEventListener("click", captureScan);
-
-    // Sidebar toggle functionality
-    document.getElementById("sidebarToggle").addEventListener("click", toggleSidebar);
-};
-
-// ========================
-// Sidebar Toggle Function
-// ========================
-function toggleSidebar() {
-    const sidebar = document.querySelector(".sidebar");
-    sidebar.classList.toggle("show");
-}
-
-// ========================
-// Side Navigation Functions
-// ========================
-function loadAllLists() {
-    const allLists = Object.keys(localStorage);
-    const listMenu = document.getElementById("listMenu");
-    listMenu.innerHTML = ""; // Clear existing menu items
-
-    allLists.forEach((listName) => {
-        const itemCount = getListCount(listName);
-        const a = document.createElement("a");
-        a.href = "javascript:void(0)";
-        a.innerHTML = `${listName} <span class="item-count">(${itemCount})</span>`;
-        a.addEventListener("click", () => {
-            currentListName = listName;
-            loadItems(listName);
-            highlightCurrentList(listName); // Highlight the active list
-        });
-        listMenu.appendChild(a);
-    });
-}
-
-function getListCount(listName) {
-    const items = JSON.parse(localStorage.getItem(listName)) || [];
-    return items.length;
-}
-
-function highlightCurrentList(listName) {
-    const listMenu = document.getElementById("listMenu");
-    const links = listMenu.querySelectorAll("a");
-    links.forEach((link) => {
-        if (link.textContent.startsWith(listName)) {
-            link.classList.add("active-list");
-        } else {
-            link.classList.remove("active-list");
+        loadList(e.currentTarget.dataset.id);
+        if (window.innerWidth <= 768) {
+          sidebar.classList.remove("show");
+          sidebar.classList.add("hidden");
         }
-    });
-}
-
-// ========================
-// Shared List Setup from URL (if any)
-// ========================
-function setupSharedList() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const listName = urlParams.get("list");
-    const items = urlParams.get("items");
-
-    if (listName && items) {
-        try {
-            const decodedItems = JSON.parse(decodeURIComponent(items));
-            const saveChoice = confirm(`Would you like to save "${listName}" to your lists?`);
-
-            if (saveChoice) {
-                if (localStorage.getItem(listName)) {
-                    let newListName = prompt(
-                        `A list named "${listName}" already exists. Please enter a new name for this list:`,
-                        `${listName} (Shared)`
-                    );
-
-                    while (newListName && localStorage.getItem(newListName)) {
-                        newListName = prompt(
-                            `A list named "${newListName}" already exists. Please enter a different name:`,
-                            `${newListName} (1)`
-                        );
-                    }
-
-                    if (newListName) {
-                        localStorage.setItem(newListName, JSON.stringify(decodedItems));
-                        currentListName = newListName;
-                        loadAllLists();
-                        loadItems(newListName);
-                    }
-                } else {
-                    localStorage.setItem(listName, JSON.stringify(decodedItems));
-                    currentListName = listName;
-                    loadAllLists();
-                    loadItems(listName);
-                }
-            } else {
-                const table = document.getElementById("groceryList");
-                table.innerHTML = `<tr><th>Shared List: ${listName} (Not Saved)</th></tr>`;
-                decodedItems.forEach((item) => {
-                    const newRow = createRow(item);
-                    table.appendChild(newRow);
-                });
-            }
-
-            window.history.replaceState({}, document.title, window.location.pathname);
-        } catch (error) {
-            console.error("Error loading shared list:", error);
-            alert("There was an error loading the shared list.");
-        }
+      });
+      listMenu.appendChild(a);
     }
-}
+  }
 
-// ========================
-// List Operations
-// ========================
-function createNewList() {
-    const listNameInput = prompt("Enter a name for your new list:");
-    if (listNameInput && listNameInput.trim()) {
-        const listName = listNameInput.trim();
-        localStorage.setItem(listName, JSON.stringify([]));
-        currentListName = listName;
-        loadAllLists();
-        // Clear current list display
-        document.getElementById("groceryList").innerHTML = `<tr><th>Item</th></tr>`;
-    }
-}
+  // Load a list in the main content view based on its ID
+  function loadList(listId) {
+    currentListId = listId;
+    renderGroceryList();
+    renderListMenu();
+  }
 
-function handleShareButton() {
-    if (!currentListName) {
-        alert("Please select a list first.");
-        return;
+  // Render the grocery list table based on the active list
+  function renderGroceryList() {
+    groceryListTable.innerHTML = "";
+    if (currentListId && lists[currentListId]) {
+      lists[currentListId].items.forEach((item) => {
+        const tr = document.createElement("tr");
+        const td = document.createElement("td");
+        td.textContent = item;
+        tr.appendChild(td);
+        groceryListTable.appendChild(tr);
+      });
     }
-    const table = document.getElementById("groceryList");
-    const items = [];
-    for (let i = 1; i < table.rows.length; i++) {
-        const cell = table.rows[i].cells[0];
-        const text = cell.childNodes[1].textContent.trim();
-        items.push(text);
-    }
-    const encodedItems = encodeURIComponent(JSON.stringify(items));
-    const shareableLink = `${window.location.href}?list=${currentListName}&items=${encodedItems}`;
+  }
 
-    if (navigator.share) {
+  // Sanitize user inputs to prevent HTML injections
+  function sanitizeInput(input) {
+    const div = document.createElement("div");
+    div.appendChild(document.createTextNode(input));
+    return div.innerHTML;
+  }
+
+  // Create a new list
+  newListButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    let listName = prompt("Enter new list name:");
+    if (listName) {
+      listName = sanitizeInput(listName);
+      const listId = "list-" + Date.now();
+      lists[listId] = { name: listName, items: [] };
+      currentListId = listId;
+      saveLists();
+      renderListMenu();
+      renderGroceryList();
+    }
+  });
+
+  // Add a new item to the currently active list
+  addButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    const itemVal = itemInput.value.trim();
+    if (itemVal && currentListId) {
+      const sanitizedItem = sanitizeInput(itemVal);
+      lists[currentListId].items.push(sanitizedItem);
+      saveLists();
+      renderGroceryList();
+      renderListMenu();
+      itemInput.value = "";
+    }
+  });
+
+  // Delete the current list
+  deleteListButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (currentListId && confirm("Delete current list?")) {
+      delete lists[currentListId];
+      currentListId = null;
+      saveLists();
+      renderListMenu();
+      renderGroceryList();
+    }
+  });
+
+  // Rename the current list
+  renameListButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (currentListId) {
+      let newName = prompt("Enter new name for the list:", lists[currentListId].name);
+      if (newName) {
+        newName = sanitizeInput(newName);
+        lists[currentListId].name = newName;
+        saveLists();
+        renderListMenu();
+      }
+    }
+  });
+
+  // Share the current list using the Web Share API (or fallback to clipboard)
+  shareButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (currentListId) {
+      const listContent = lists[currentListId].items.join("\n");
+      if (navigator.share) {
         navigator
-            .share({
-                title: `Share ${currentListName} List`,
-                text: `Check out this list:`,
-                url: shareableLink,
-            })
-            .then(() => console.log("Shared successfully!"))
-            .catch((error) => console.log("Sharing failed", error));
-    } else {
-        alert(`You can share this link: ${shareableLink}`);
+          .share({
+            title: lists[currentListId].name,
+            text: listContent,
+          })
+          .catch((error) => console.log("Error sharing", error));
+      } else {
+        navigator.clipboard
+          .writeText(listContent)
+          .then(() => alert("List copied to clipboard"))
+          .catch(() => alert("Failed to copy list"));
+      }
     }
-}
+  });
 
-function Add() {
-    if (!currentListName) {
-        alert("Please select or create a list first.");
-        return;
-    }
-    const table = document.getElementById("groceryList");
-    let item = document.getElementById("item").value.trim();
-    if (item) {
-        const sanitizedItem = sanitizeInput(item);
-        const newRow = createRow(sanitizedItem);
-        table.appendChild(newRow);
-        document.getElementById("groceryForm").reset();
-        saveItems(currentListName);
-    } else {
-        alert("Please enter a valid item.");
-    }
-}
+  // Open the scanner modal and start video stream from the device's camera
+  scanButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    openScanner();
+  });
 
-function createRow(itemText) {
-    const newRow = document.createElement("tr");
-
-    const cell = document.createElement("td");
-
-    // Add drag handle
-    const dragHandle = document.createElement("span");
-    dragHandle.className = "drag-handle";
-    dragHandle.textContent = "☰";
-
-    // Add text node
-    const textNode = document.createTextNode(` ${itemText} `);
-
-    // Add delete button
-    const deleteBtn = document.createElement("button");
-    deleteBtn.className = "delete-btn";
-    deleteBtn.textContent = "X";
-    deleteBtn.onclick = function () {
-        newRow.classList.add("fade-out");
-        setTimeout(() => {
-            newRow.remove();
-            saveItems(currentListName);
-        }, 300);
-    };
-
-    // Append elements to the cell
-    cell.appendChild(dragHandle);
-    cell.appendChild(textNode);
-    cell.appendChild(deleteBtn);
-    newRow.appendChild(cell);
-
-    return newRow;
-}
-
-function saveItems(listName) {
-    const table = document.getElementById("groceryList");
-    const items = [];
-
-    for (let i = 1; i < table.rows.length; i++) {
-        const cell = table.rows[i].cells[0];
-        const text = cell.childNodes[1].textContent.trim();
-        items.push(text);
-    }
-
-    localStorage.setItem(listName, JSON.stringify(items));
-    loadAllLists();
-}
-
-function loadItems(listName) {
-    const items = JSON.parse(localStorage.getItem(listName)) || [];
-    const table = document.getElementById("groceryList");
-
-    // Clear existing items
-    table.innerHTML = `<tr><th>Item</th></tr>`;
-
-    items.forEach((item) => {
-        const newRow = createRow(item);
-        table.appendChild(newRow);
-    });
-}
-
-function deleteSelectedList() {
-    if (!currentListName) {
-        alert("Please select a list first.");
-        return;
-    }
-
-    if (confirm(`Are you sure you want to delete the list "${currentListName}"?`)) {
-        localStorage.removeItem(currentListName);
-
-        // Clear current list display
-        document.getElementById("groceryList").innerHTML = `<tr><th>Item</th></tr>`;
-        currentListName = "";
-        loadAllLists();
-    }
-}
-
-function renameList() {
-    if (!currentListName) {
-        alert("Please select a list first.");
-        return;
-    }
-
-    const newName = prompt(`Enter new name for "${currentListName}":`, currentListName);
-
-    if (newName && newName.trim() && newName !== currentListName) {
-        if (localStorage.getItem(newName)) {
-            alert("A list with this name already exists.");
-            return;
-        }
-
-        // Get the current items
-        const items = JSON.parse(localStorage.getItem(currentListName));
-
-        // Remove old list and create new one
-        localStorage.removeItem(currentListName);
-        localStorage.setItem(newName, JSON.stringify(items));
-
-        // Update current list name
-        currentListName = newName;
-
-        // Update side menu
-        loadAllLists();
-        loadItems(newName);
-    }
-}
-
-function sanitizeInput(input) {
-    const temp = document.createElement("div");
-    temp.textContent = input;
-    return temp.innerHTML;
-}
-
-// ========================
-// Scanner Functions
-// ========================
-function openScanner() {
-    const modal = document.getElementById("scannerModal");
-    const video = document.getElementById("video");
-
-    modal.classList.remove("hidden");
-
-    // Prefer rear camera if available
-    const constraints = {
-        video: { facingMode: { exact: "environment" } },
-        audio: false,
-    };
-
-    navigator.mediaDevices
-        .getUserMedia(constraints)
-        .then(function (stream) {
-            videoStream = stream;
-            video.srcObject = stream;
-            video.play();
+  function openScanner() {
+    scannerModal.classList.remove("hidden");
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices
+        .getUserMedia({ video: { facingMode: "environment" } })
+        .then((stream) => {
+          video.srcObject = stream;
+          video.play();
         })
-        .catch(function (err) {
-            console.error("Error accessing camera:", err);
-            alert(
-                "Error accessing camera. Please make sure you have granted camera permissions."
-            );
-            closeScanner();
+        .catch((err) => {
+          console.error("Error accessing camera: " + err);
+          alert("Cannot access camera.");
         });
-}
-
-function closeScanner() {
-    const modal = document.getElementById("scannerModal");
-    const video = document.getElementById("video");
-
-    modal.classList.add("hidden");
-
-    if (videoStream) {
-        videoStream.getTracks().forEach((track) => track.stop());
-        video.srcObject = null;
-        videoStream = null;
     }
-}
+  }
 
-function captureScan() {
-    const video = document.getElementById("video");
+  // Close the scanner modal and stop the video stream
+  function closeScanner() {
+    scannerModal.classList.add("hidden");
+    const stream = video.srcObject;
+    if (stream) {
+      stream.getTracks().forEach((track) => track.stop());
+      video.srcObject = null;
+    }
+  }
+  window.closeScanner = closeScanner; // Expose for inline onclick handler
+
+  // Capture image from video, process OCR, and add detected text as items
+  captureButton.addEventListener("click", (e) => {
+    e.preventDefault();
     const canvas = document.createElement("canvas");
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
-    
-	    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d");
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
     canvas.toBlob(function (blob) {
-        if (!blob) {
-            console.error("Blob is null");
-            return;
-        }
-        performOCR(blob);
-    }, "image/jpeg");
-}
-
-function performOCR(imageBlob) {
-    Tesseract.recognize(
-        imageBlob,
-        "eng", // Specify language code (English in this case)
-        { logger: (m) => console.log(m) } // Optional logging
-    )
-        .then(({ data: { text } }) => {
-            // OCR completed
-            console.log("OCR Result:", text);
-            processScannedText(text);
-            closeScanner();
+      Tesseract.recognize(blob, "eng")
+        .then((result) => {
+          const text = result.data.text;
+          const lines = text.split("\n")
+            .map((line) => line.trim())
+            .filter((line) => line.length > 0);
+          if (lines.length === 0) {
+            alert("No text detected.");
+          } else if (currentListId) {
+            lines.forEach((line) => {
+              lists[currentListId].items.push(sanitizeInput(line));
+            });
+            saveLists();
+            renderGroceryList();
+            renderListMenu();
+          }
         })
         .catch((err) => {
-            console.error("OCR Error:", err);
-            alert("OCR process failed. Please try again.");
-            closeScanner();
+          console.error(err);
+          alert("Error processing image.");
+        })
+        .finally(() => {
+          closeScanner();
         });
-}
+    }, "image/jpeg");
+  });
 
-function processScannedText(text) {
-    if (!currentListName) {
-        alert("Please select a list first.");
-        return;
-    }
-
-    const items = text
-        .split("\n")
-        .map((item) => item.trim())
-        .filter((item) => item);
-    const table = document.getElementById("groceryList");
-    items.forEach((item) => {
-        const sanitizedItem = sanitizeInput(item);
-        const newRow = createRow(sanitizedItem);
-        table.appendChild(newRow);
-    });
-    saveItems(currentListName);
-}
+  // Initial render of the sidebar menu
+  renderListMenu();
+});
