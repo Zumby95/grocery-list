@@ -24,20 +24,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const captureButton = document.getElementById("captureButton");
 
   // Toggle sidebar for mobile devices with touch support
-  function toggleSidebar() {
-    if (sidebar.classList.contains("show")) {
-      sidebar.classList.remove("show");
-      sidebar.classList.add("hidden");
-    } else {
-      sidebar.classList.remove("hidden");
-      sidebar.classList.add("show");
-    }
-  }
+function toggleSidebar() {
+  sidebar.classList.toggle("show");
+}
   sidebarToggle.addEventListener("click", toggleSidebar);
   sidebarToggle.addEventListener("touchstart", (e) => {
     e.preventDefault();
     toggleSidebar();
   });
+
+document.addEventListener("click", (e) => {
+  if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target) && sidebar.classList.contains("show")) {
+    toggleSidebar();
+  }
+});
 
   // Save lists to phone storage (localStorage)
   function saveLists() {
@@ -179,20 +179,22 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function openScanner() {
-    scannerModal.classList.remove("hidden");
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices
-        .getUserMedia({ video: { facingMode: "environment" } })
-        .then((stream) => {
-          video.srcObject = stream;
-          video.play();
-        })
-        .catch((err) => {
-          console.error("Error accessing camera: " + err);
-          alert("Cannot access camera.");
-        });
-    }
+  scannerModal.classList.remove("hidden");
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    navigator.mediaDevices
+      .getUserMedia({ video: { facingMode: "environment" } })
+      .then((stream) => {
+        video.srcObject = stream;
+        video.play();
+      })
+      .catch((err) => {
+        console.error("Error accessing camera: " + err);
+        alert("Cannot access camera. Please ensure you've granted camera permissions.");
+      });
+  } else {
+    alert("Your device doesn't support camera access.");
   }
+}
 
   // Close the scanner modal and stop the video stream
   function closeScanner() {
@@ -207,40 +209,40 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Capture image from video, process OCR, and add detected text as items
   captureButton.addEventListener("click", (e) => {
-    e.preventDefault();
-    const canvas = document.createElement("canvas");
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    const ctx = canvas.getContext("2d");
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    canvas.toBlob(function (blob) {
-      Tesseract.recognize(blob, "eng")
-        .then((result) => {
-          const text = result.data.text;
-          const lines = text.split("\n")
-            .map((line) => line.trim())
-            .filter((line) => line.length > 0);
-          if (lines.length === 0) {
-            alert("No text detected.");
-          } else if (currentListId) {
-            lines.forEach((line) => {
-              lists[currentListId].items.push(sanitizeInput(line));
-            });
-            saveLists();
-            renderGroceryList();
-            renderListMenu();
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-          alert("Error processing image.");
-        })
-        .finally(() => {
-          closeScanner();
+  e.preventDefault();
+  const canvas = document.createElement("canvas");
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  
+  Tesseract.recognize(canvas.toDataURL("image/jpeg"), "eng", {
+    logger: (m) => console.log(m)
+  })
+    .then(({ data: { text } }) => {
+      const lines = text.split("\n")
+        .map((line) => line.trim())
+        .filter((line) => line.length > 0);
+      if (lines.length === 0) {
+        alert("No text detected. Please try again.");
+      } else if (currentListId) {
+        lines.forEach((line) => {
+          lists[currentListId].items.push(sanitizeInput(line));
         });
-    }, "image/jpeg");
-  });
-
+        saveLists();
+        renderGroceryList();
+        renderListMenu();
+        alert(`Added ${lines.length} item(s) to the list.`);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      alert("Error processing image. Please try again.");
+    })
+    .finally(() => {
+      closeScanner();
+    });
+});
   // Initial render of the sidebar menu
   renderListMenu();
 });
