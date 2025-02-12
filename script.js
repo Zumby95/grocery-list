@@ -23,7 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const video = document.getElementById("video");
   const captureButton = document.getElementById("captureButton");
 
-  // Toggle sidebar for mobile devices with touch support
+ 
+// Toggle sidebar for mobile devices with touch support
 function toggleSidebar() {
   sidebar.classList.toggle("show");
 }
