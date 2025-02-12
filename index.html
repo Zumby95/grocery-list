@@ -1,98 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grocery List</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grocery List</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
         integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-    <div class="container">
-        <!-- Sidebar toggle button -->
-        <button id="sidebarToggle" class="sidebar-toggle"><i class="fas fa-bars"></i></button>
+  <div class="container">
+    <!-- Sidebar toggle button for mobile -->
+    <button id="sidebarToggle" class="sidebar-toggle"><i class="fas fa-bars"></i></button>
 
-        <!-- Sidebar -->
-        <aside class="sidebar hidden">
-            <header class="sidebar-header">
-                <span class="site-title">Grocery Lists</span>
-            </header>
-            <nav class="sidebar-nav">
-                <ul>
-                    <li>
-                        <a href="#" id="newListButton">
-                            <i class="fas fa-plus-circle"></i>
-                            New List
-                        </a>
-                    </li>
-                </ul>
-                <div id="listMenu" class="list-menu">
-                    <!-- List items will be dynamically loaded here -->
-                </div>
-            </nav>
-            <footer class="sidebar-footer">
-                <a href="#" id="deleteListButton">
-                    <i class="fas fa-trash"></i>
-                    Delete List
-                </a>
-                <a href="#" id="renameListButton">
-                    <i class="fas fa-edit"></i>
-                    Rename List
-                </a>
-                <a href="#" id="scanButton">
-                    <i class="fas fa-camera"></i>
-                    Scan Items
-                </a>
-                <a href="#" id="shareButton">
-                    <i class="fas fa-share-alt"></i>
-                    Share List
-                </a>
-            </footer>
-        </aside>
+    <!-- Sidebar -->
+    <aside class="sidebar hidden">
+      <header class="sidebar-header">
+        <span class="site-title">Grocery Lists</span>
+      </header>
+      <nav class="sidebar-nav">
+        <ul>
+          <li>
+            <a href="#" id="newListButton">
+              <i class="fas fa-plus-circle"></i>
+              New List
+            </a>
+          </li>
+        </ul>
+        <div id="listMenu" class="list-menu">
+          <!-- Dynamically loaded list items -->
+        </div>
+      </nav>
+      <footer class="sidebar-footer">
+        <a href="#" id="deleteListButton">
+          <i class="fas fa-trash"></i>
+          Delete List
+        </a>
+        <a href="#" id="renameListButton">
+          <i class="fas fa-edit"></i>
+          Rename List
+        </a>
+        <a href="#" id="scanButton">
+          <i class="fas fa-camera"></i>
+          Scan Items
+        </a>
+        <a href="#" id="shareButton">
+          <i class="fas fa-share-alt"></i>
+          Share List
+        </a>
+      </footer>
+    </aside>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Add Item Section -->
-            <section class="add-item-section">
-                <form id="groceryForm">
-                    <input type="text" id="item" placeholder="Add item..." autocomplete="off">
-                    <button type="button" id="addButton"><i class="fas fa-plus"></i></button>
-                </form>
-            </section>
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Add Item Section -->
+      <section class="add-item-section">
+        <form id="groceryForm">
+          <input type="text" id="item" placeholder="Add item..." autocomplete="off">
+          <button type="button" id="addButton"><i class="fas fa-plus"></i></button>
+        </form>
+      </section>
 
-            <!-- List Section -->
-            <section class="list-section">
-                <table id="groceryList">
-                    <thead>
-                        <tr>
-                            <th>Item</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </section>
+      <!-- List Section -->
+      <section class="list-section">
+        <table id="groceryList">
+          <thead>
+            <tr>
+              <th>Item</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
 
-            <!-- Scanner Modal -->
-            <div id="scannerModal" class="modal hidden">
-                <div class="modal-content">
-                    <span class="close" onclick="closeScanner()">&times;</span>
-                    <video id="video" autoplay playsinline></video>
-                    <button id="captureButton" class="button">Capture Scan</button>
-                </div>
-            </div>
-        </main>
-    </div>
+      <!-- Scanner Modal -->
+      <div id="scannerModal" class="modal hidden">
+        <div class="modal-content">
+          <span class="close" onclick="closeScanner()">&times;</span>
+          <video id="video" autoplay playsinline></video>
+          <button id="captureButton" class="button">Capture Scan</button>
+        </div>
+      </div>
+    </main>
+  </div>
 
-    <!-- Load Tesseract.js for OCR -->
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@v2.1.5/dist/tesseract.min.js"></script>
-
-    <!-- JavaScript -->
-    <script src="script.js"></script>
+  <!-- Load Tesseract.js for OCR processing -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@v2.1.5/dist/tesseract.min.js"></script>
+  <!-- JavaScript -->
+  <script src="script.js"></script>
 </body>
-
 </html>
