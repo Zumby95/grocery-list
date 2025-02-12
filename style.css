@@ -27,7 +27,6 @@ body {
   z-index: 1000;
 }
 
-/* When sidebar is toggled, slide into view */
 .sidebar.show {
   left: 0;
 }
@@ -49,10 +48,11 @@ body {
 
 .sidebar-nav li a {
   display: block;
-  padding: 15px 20px;
+  padding: 15px;
   color: #ddd;
   text-decoration: none;
-  transition: background-color 0.3s ease-in-out;
+  border-bottom: 1px solid #555;
+  transition: background-color 0.3s ease;
 }
 
 .sidebar-nav li a:hover {
@@ -63,7 +63,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 20px;
+  padding: 15px;
   color: #ddd;
   text-decoration: none;
   transition: background-color 0.3s ease;
@@ -81,7 +81,7 @@ body {
 
 .sidebar-footer a {
   display: block;
-  padding: 12px 15px;
+  padding: 12px;
   text-decoration: none;
   color: #ddd;
   background-color: rgba(255, 255, 255, 0.05);
@@ -111,32 +111,84 @@ body {
   font-size: 1.5em;
 }
 
-/* Hide toggle button on larger screens */
-@media (max-width: 768px) {
-  .sidebar {
-    width: 80%;
-    max-width: 250px;
-  }
-}
-  .sidebar {
-    transform: translateX(0);
-    position: relative;
-    left: 0;
-    width: auto;
-    height: auto;
-    flex-basis: auto;
-  }
-}
-
-/* Main Content Styles */
+/* Main Content */
 .main-content {
   flex-grow: 1;
+  padding: 20px;
   display: flex;
+  flex-direction: column;
+  gap: 20px;
   align-items: center;
   justify-content: center;
 }
 
-/* Modal Styles */
+/* Add Item Section */
+.add-item-section {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.add-item-section input {
+  flex-grow: 1;
+  padding: 10px;
+  font-size: 1rem;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+}
+
+.add-item-section button {
+  background-color: #343a40;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-item-section button i {
+  font-size: 1.5em;
+}
+
+/* Grocery List Cards */
+.grocery-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.grocery-list .grocery-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.grocery-list .grocery-item:hover {
+  transform: scale(1.05);
+}
+
+.grocery-list .grocery-item button {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.grocery-list .grocery-item button:hover {
+  background-color: #c0392b;
+}
+
+/* Modal */
 .modal {
   position: fixed;
   top: 0;
@@ -154,7 +206,6 @@ body {
   background: #fff;
   padding: 20px;
   border-radius: 8px;
-  position: relative;
   width: 90%;
   max-width: 400px;
   text-align: center;
@@ -166,49 +217,27 @@ body {
   border-radius: 6px;
 }
 
-.modal-content .close {
-  position: absolute;
-  top: 10px;
-  right: 20px;
-  font-size: 28px;
-  cursor: pointer;
-}
-
-.hidden {
-  display: none !important;
-}
-
 /* Animations */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
-/* Utility Classes */
-.fade-out {
-  opacity: 0;
-  transition: opacity 0.3s ease-out;
-}
-
-.dragging {
-  background-color: #f0f0f0;
-  border: 2px dashed #ccc;
-}
-
-/* Highlight Active List in Sidebar */
-.list-menu a.active-list {
-  background-color: rgba(255, 255, 255, 0.2);
-  font-weight: bold;
-}
-
 /* Responsive Design for Mobile */
 @media (max-width: 768px) {
   .container {
     flex-direction: column;
-    margin-top: 50px;
   }
+
   .main-content {
-    margin-left: 0;
-    padding-top: 20px;
+    padding-top: 40px;
+  }
+
+  .add-item-section input {
+    font-size: 1.1rem;
+  }
+
+  .grocery-item {
+    flex-direction: column;
   }
 }
